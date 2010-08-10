@@ -4,9 +4,6 @@
 * 	get
 * 	set
 *
-* Options:
-* 	url
-*
 * Events:
 * 	update
 * 	
@@ -14,10 +11,10 @@
 model("setting",{
 	url: "/webim/setting",
 	data: {
-		play_sound: true,
-		buddy_sticky: true,
+		play_sound:true,
+		buddy_sticky:true,
 		minimize_layout: false,
-		msg_auto_pop: true
+		msg_auto_pop:true
 	}
 },{
 	_init:function(){
@@ -35,10 +32,10 @@ model("setting",{
 			options[key] = value;
 		}
 		var _old = self.data,
-			up = checkUpdate(_old, options);
+		up = checkUpdate(_old, options);
 		if ( up ) {
 			each(up,function(key,val){
-				self.trigger("update",[key,val]);
+				self.trigger("update", [key, val]);
 			});
 			var _new = extend({}, _old, options);
 			self.data = _new;
