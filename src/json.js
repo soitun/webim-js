@@ -28,9 +28,10 @@ var JSON = (function(){
 	}
 	return {
 		encode: encode,
-		decode: function(string){
-			//if(!string || !string.length)return null;
-			return (new Function("return " + string))();
+		decode: function(str){
+			str = str.toString();
+			if(!str || !str.length)return null;
+			return (new Function("return " + str))();
 			//if (secure && !(/^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]*$/).test(string.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, ''))) return null;
 		}
 	}
