@@ -100,7 +100,7 @@ status\_time		|string	|用户状态时间
 
 ####示例
 
-	[&roomMemberInfo]
+	[&amp;roomMemberInfo]
 
 ###群组信息roomInfo
 
@@ -110,13 +110,13 @@ status\_time		|string	|用户状态时间
 		"id": "2",
 	        "name": "jack",
 	        "nick": "Jack",
-	        "pic_url": "http://www.uchome.com/uc/ucenter/avatar.php?uid=2&size=small&type=virtual",
+	        "pic_url": "http://www.uchome.com/uc/ucenter/avatar.php?uid=2&amp;size=small&amp;type=virtual",
 		"default_pic_url": "",
 	        "url": "group.php?uid=2",
 		"all_count": 10,
 	        "count": 5,
 		"blocked": false,
-	        "members": [&roomMemberInfo] 
+	        "members": &amp;members 
 	}
 
 参数名			|类型		|描述
@@ -135,13 +135,13 @@ members			|&amp;members	|群组在线成员
 
 ####示例
 
-	[&buddyInfo]
+	[&amp;buddyInfo]
 
 ###群组列表rooms
 
 ####示例
 
-	[&roomInfo]
+	[&amp;roomInfo]
 
 ###聊天记录logItem
 
@@ -171,8 +171,14 @@ timestamp		|int		|消息发送时间，时间为javascript时间，php中使用m
 ####示例
 
 	{
-	        1: [&logItem],
-	        2: [&logItem]
+	        unicast: {
+				1: [&amp;logItem],
+				2: [&amp;logItem]
+		},
+	        multicast: {
+				1: [&amp;logItem],
+				2: [&amp;logItem]
+		}
 	}
 	
 ##接口说明
@@ -191,13 +197,13 @@ timestamp		|int		|消息发送时间，时间为javascript时间，php中使用m
 
         {
                 server_time: "", //服务器时间microtime(true)*1000
-                user: &userInfo,
-                connection: &connection,
+                user: &amp;userInfo,
+                connection: &amp;connection,
                 setting: {},
                 buddy_online_ids: "54,22",	//在线buddy
-                presence_buddies: &buddies, //根据presence_buddies参数和离线消息from ids取得联系人信息
-                presence_rooms: &rooms, //根据presence_rooms参数取得群组信息
-                histories: &histories, //根据presence_buddies , presence_rooms和离线消息from ids取得消息历史记录
+                presence_buddies: &amp;buddies, //根据presence_buddies参数和离线消息from ids取得联系人信息
+                presence_rooms: &amp;rooms, //根据presence_rooms参数取得群组信息
+                histories: &amp;histories, //根据presence_buddies , presence_rooms和离线消息from ids取得消息历史记录
                 new_messages: []//未收到的离线消息
         }
 
@@ -205,7 +211,7 @@ timestamp		|int		|消息发送时间，时间为javascript时间，php中使用m
 
 ####请求参数
 
-	&connection
+	&amp;connection
 
 ####返回参数
 
@@ -215,7 +221,7 @@ timestamp		|int		|消息发送时间，时间为javascript时间，php中使用m
 
 ####请求参数
 
-	&connection
+	&amp;connection
 
 ####返回参数
 
@@ -231,7 +237,7 @@ timestamp		|int		|消息发送时间，时间为javascript时间，php中使用m
 
 ####返回参数
 
-        &buddies
+        &amp;buddies
 
 
 ###获取房间列表 GET webim/rooms
@@ -244,26 +250,26 @@ timestamp		|int		|消息发送时间，时间为javascript时间，php中使用m
 
 ####返回参数
 
-        &rooms
+        &amp;rooms
 
 ###加入房间 POST webim/join
 
 ####请求参数
 
-	&connection
+	&amp;connection
 	{
                 id:"1"
         }
 
 ####返回参数
 
-        &roomInfo
+        &amp;roomInfo
 
 ###离开房间 POST webim/leave
 
 ####请求参数
 
-	&connection
+	&amp;connection
         {
                 id:"1"
         }
@@ -276,15 +282,16 @@ timestamp		|int		|消息发送时间，时间为javascript时间，php中使用m
 
 ####请求参数
 
-	&connection
+	&amp;connection
         {
                 ids:"1"
         }
 
 ####返回参数
+
         {
-        	10001:[&roomMemberInfo],
-        	10002:[&roomMemberInfo]
+        	10001:[&amp;roomMemberInfo],
+        	10002:[&amp;roomMemberInfo]
 	}
 
 ###获得历史记录 GET webim/histories
@@ -298,13 +305,13 @@ timestamp		|int		|消息发送时间，时间为javascript时间，php中使用m
 
 ####返回参数
 
-        &histories
+        &amp;histories
 
 ###发送消息 POST webim/message
 
 ####请求参数
 
-	&connection
+	&amp;connection
         {
                 type: "unicast", //[unicast, multicast] 一对一buddy, 一对多room
                 offline: 1, //to 离线消息
@@ -334,7 +341,7 @@ timestamp		|int		|消息发送时间，时间为javascript时间，php中使用m
 
 ####请求参数
 
-	&connection
+	&amp;connection
         {
                 to: "11",
                 show: "typing"	//[typing]
