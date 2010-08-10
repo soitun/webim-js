@@ -1,4 +1,3 @@
-var _path = "";
 var webim = window.webim, log = webim.log;
 webim.defaults.urls = {
 	online: _path + "data/online.php",

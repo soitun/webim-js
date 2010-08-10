@@ -1,6 +1,6 @@
 module("comet");
 
-test("webim.comet connect", function() {
+asyncTest("webim.comet connect", function() {
 	expect( 1 );
 	stop(6000);
 	var comet = new webim.comet(null, {
