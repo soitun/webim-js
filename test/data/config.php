@@ -3,7 +3,7 @@
 $connection = array(
 	"domain" => "www.nextim.cn",
 	"ticket" => "8633d182-b7fe-42a3-8466-0c4134cfebf2",
-	"server" => "packets.php"
+	"server" => "data/packets.php"
 );
 
 $user = array(
@@ -123,19 +123,50 @@ $members = array(
 
 $histories = array(
 	"unicast" => array(
-		"2" => array(
-			array(
-				"type" => "unicast"
+		),
+		"multicast" => array(
 			)
-		)
-	),
-	"multicast" => array(
-		"1" => array(
-			array(
-				"type" => "multicast"
-			)
-		)
-	)
-);
+		);
 
+foreach($buddies as $i => $o){
+	$histories["unicast"][$o["id"]] = array(
+		array(
+			"type" => "unicast",
+			"to" => 1,
+			"from" => $o["id"],
+			"style" => "",
+			"body" => "Hi.",
+			"timestamp" => 1246883572400
+		),
+		array(
+			"type" => "unicast",
+			"from" => 1,
+			"to" => $o["id"],
+			"style" => "",
+			"body" => "Hello.",
+			"timestamp" => 1246883582400
+		)
+	);
+}
+
+foreach($rooms as $i => $o){
+	$histories["multicast"][$o["id"]] = array(
+		array(
+			"type" => "multicast",
+			"from" => 1,
+			"to" => $o["id"],
+			"style" => "",
+			"body" => "People?",
+			"timestamp" => 1246883572400
+		),
+		array(
+			"type" => "unicast",
+			"from" => 2,
+			"to" => $o["id"],
+			"style" => "",
+			"body" => "Ok.",
+			"timestamp" => 1246883582400
+		)
+	);
+}
 ?>

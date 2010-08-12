@@ -5,7 +5,7 @@ test("Basic requirements", function() {
 	ok( Array.prototype.push, "Array.push()" );
 	ok( Function.prototype.apply, "Function.apply()" );
 	ok( RegExp, "RegExp" );
-	ok( webim, "webim" );
+	ok( webim, "has webim" );
 });
 test("webim.isFunction", function() {
 	expect(12);

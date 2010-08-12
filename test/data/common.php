@@ -48,4 +48,7 @@ function ids_except($id, $ids){
 	return $ids;
 }
 
+$id = gp("id");
+$ids = ids_array(gp("ids"));
+
 ?>

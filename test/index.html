@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<title>im test</title>
-		<link href="css/core.css" media="all" type="text/css" rel="stylesheet"/>
+		<title>WebIM Test Suite</title>
 		<!-- base start -->
 		<script type="text/javascript" src="../src/core.js" ></script>
 		<script type="text/javascript" src="../src/objectExtend.js" ></script>
@@ -19,27 +18,26 @@
 		<script type="text/javascript" src="../src/status.js" ></script>
 		<script type="text/javascript" src="../src/buddy.js" ></script>
 		<script type="text/javascript" src="../src/room.js" ></script>
-		<script type="text/javascript" src="../src/notification.js" ></script>
 		<script type="text/javascript" src="../src/history.js" ></script>
 		<!-- webim end -->
 		<link rel="stylesheet" href="qunit/qunit/qunit.css" type="text/css" media="screen">
 		<script type="text/javascript" src="qunit/qunit/qunit.js"></script>
-		<script type="text/javascript">
-			var _path = "";
-		</script>
+		<script type="text/javascript">var _path = "";</script>
 		<script type="text/javascript" src="config.js"></script>
+		<script type="text/javascript" src="data.js"></script>
 		<script type="text/javascript" src="unit/core.js"></script>
 		<script type="text/javascript" src="unit/ajax.js"></script>
 		<script type="text/javascript" src="unit/json.js"></script>
 		<script type="text/javascript" src="unit/comet.js"></script>
 		<script type="text/javascript" src="unit/setting.js"></script>
-		<script type="text/javascript" src="unit/webim.js"></script>
+		<script type="text/javascript" src="unit/im.js"></script>
+		<script type="text/javascript" src="unit/history.js"></script>
 	</head>
 	<body class="flora">
 		<h1 id="qunit-header">WebIM Test Suite</h1>
 		<h2 id="qunit-banner"></h2>
-		<div id="qunit-testrunner-toolbar"></div>
 		<h2 id="qunit-userAgent"></h2>
 		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
 	</body>
 </html>
