@@ -12,7 +12,6 @@ webim.history.defaults.urls = {
 	clear: _path + "data/clear_history.php"
 };
 webim.buddy.defaults.url = _path + "data/buddies.php";
-webim.notification.defaults.url = _path + "data/notifications.php";
 webim.room.defaults.urls = {
 	join: _path + "data/join.php",
 	leave: _path + "data/leave.php",
