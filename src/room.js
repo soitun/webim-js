@@ -10,6 +10,7 @@
 *	leave(id)
 *	count()
 *	initMember
+*	loadMember
 *	addMember
 *	removeMember
 *	members(id)
@@ -152,7 +153,7 @@
 				data: {
 					ticket: options.ticket,
 					id: id,
-          nick: user.name
+					nick: user.name
 				},
 				success: function(data){
 					//self.trigger("join",[data]);
@@ -171,7 +172,7 @@
 					data: {
 						ticket: options.ticket,
 						id: id,
-            nick: user.name
+						nick: user.name
 					}
 				});
 				self.trigger("leave",[d]);
@@ -181,4 +182,3 @@
 		}
 	});
 })();
-

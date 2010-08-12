@@ -1,16 +1,18 @@
 /*
-history // 消息历史记录
+history // 消息历史记录 Support unicast and multicast
 attributes：
-data []所有信息 readonly 
+data 所有信息 readonly 
 methods:
-get(id)
-load(ids)
-clear(ids)
-init(data)
+unicast(id) //Get
+multicast(id) //Get
+load(type, id)
+clear(type, id)
+init(type, id, data)
 handle(data) //handle data and distribute events
 
 events:
-data //id,data
+unicast //id,data
+multicast //id,data
 clear //
 */
 
@@ -19,85 +21,79 @@ model("history",{
 }, {
 	_init:function(){
 		this.data = this.data || {};
+		this.data.unicast = this.data.unicast || {};
+		this.data.multicast = this.data.multicast || {};
 	},
-	get: function(id){
-		return this.data[id];
+	//get: function(type, id){
+	//	return this.data[type][id];
+	//},
+	unicast: function(id){
+		return this.data["unicast"][id];
+	},
+	multicast: function(id){
+		return this.data["multicast"][id];
 	},
 	handle:function(addData){
-		var self = this, data = self.data, cache = {};
+		var self = this, data = self.data, cache = {"unicast": {}, "multicast": {}};
 		addData = makeArray(addData);
 		var l = addData.length , v, id, userId = self.options.userInfo.id;
 		if(!l)return;
 		for(var i = 0; i < l; i++){
 			//for(var i in addData){
 			v = addData[i];
-			id = v.to == userId ? v.from : v.to;
-			if(id){
-				cache[id] = cache[id] || [];
-				cache[id].push(v);
+			type = v.type;
+			id = type == "unicast" ? (v.to == userId ? v.from : v.to) : v.to;
+			if(id && type){
+				cache[type][id] = cache[type][id] || [];
+				cache[type][id].push(v);
 			}
 		}
-		var ids = [];
-		for (var key in cache) {
-			var v = cache[key];
-			if(data[key]){
-				data[key] = data[key].concat(v);
-				self._triggerMsg(key, v);
-			}else{
-
-				ids.push(key);
+		for (var type in cache){
+			for (var id in cache[type]){
+				var v = cache[type][id];
+				if(data[type][id]){
+					data[type][id] = data[type][id].concat(v);
+					self._triggerMsg(type, id, v);
+				}else{
+					self.load(type, id);
+				}
 			}
 		}
-		self.load(ids);
-
 	},
-	_triggerMsg: function(id, data){
+	_triggerMsg: function(type, id, data){
 		//this.trigger("message." + id, [data]);
-		this.trigger("data", [id, data]);
+		this.trigger(type, [id, data]);
 	},
-	clear: function(ids){
-		ids = idsArray(ids);
-		var self = this, l = ids.length, options = self.options, id;
-		if(l){
-			for(var i = 0; i < l; i++){
-				id = ids[i];
-				self.data[id] = [];
-				self.trigger("clear", [id]);
+	clear: function(type, id){
+		var self = this, options = self.options;
+		self.data[type][id] = [];
+		self.trigger("clear", [type, id]);
+		ajax({
+			url: options.urls.clear,
+			cache: false,
+			//dataType: "json",
+			data:{ type: type, id: id}
+		});
+	},
+	init: function(type, id, data){
+		var self = this;
+		if(isArray(data)){
+			self.data[type][id] = data;
+			self._triggerMsg(type, id, data);
+		}
+	},
+	load: function(type, id){
+		var self = this, options = self.options;
+		self.data[type][id] = [];
+		ajax({
+			url: options.urls.load,
+			cache: false,
+			dataType: "json",
+			data:{type: type, id: id},
+			//context: self,
+			success: function(data){
+				self.init(type, id, data);
 			}
-			ajax({
-				url: options.urls.clear,
-				cache: false,
-				dataType: "json",
-				data:{ ids: ids.join(",")}
-			});
-		}
-
-	},
-	init:function(data){
-		var self = this.self || this, v;
-		for(var key in data){
-			v = data[key];
-			self.data[key] = v;
-			self._triggerMsg(key, v);
-		}
-	},
-	load: function(ids){
-		ids = idsArray(ids);
-		if(ids.length){
-			var self = this, options = self.options;
-			for(var i = 0; i < ids.length; i++){
-				self.data[ids[i]] = [];
-			}
-			ajax({
-				url: options.urls.load,
-				cache: false,
-				dataType: "json",
-				data:{ ids: ids.join(",")},
-				context: self,
-				success: self.init
-			});
-		}
+		});
 	}
-
 });
-
