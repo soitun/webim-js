@@ -1,6 +1,5 @@
-module("im");
-
-test("im", function() {
+module("new");
+test("new", function() {
 	expect(4);
 	var im = new webim();
 	stop(6000);
@@ -18,5 +17,6 @@ test("im", function() {
 		ok(true, "stop");
 		start();
 	});
+	im.buddy.option("loadDelay", true);
 	im.online();
 });

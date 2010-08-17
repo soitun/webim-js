@@ -45,20 +45,20 @@ extend(webim.prototype, objectExtend,{
 		self.data = {user:{}};
 		self.status = new webim.status();
 		self.setting = new webim.setting();
-		self.buddy = new webim.buddy();
+		self.buddy = new webim.buddy(null, {loadDelay: !self.status.get("b")});
 		self.room = new webim.room();
 		self.history = new webim.history();
 		self.connection = new comet(null,{jsonp:true});
 		self._initEvents();
 		//self.online();
 	},
-	_ready: function(){
+	_ready: function(post_data){
 		var self = this;
 		self._unloadFun = window.onbeforeunload;
 		window.onbeforeunload = function(){
 			self._refresh();
 		};
-		self.trigger("ready");
+		self.trigger("ready", [post_data]);
 	},
 	_go: function(){
 		var self = this, data = self.data, history = self.history, buddy = self.buddy, room = self.room;
@@ -68,7 +68,7 @@ extend(webim.prototype, objectExtend,{
 			history.init("unicast", v.id, v.history);
 		});
 		//buddy load delay
-		buddy.online(data.online_buddy_ids, true);
+		buddy.online(data.online_buddy_ids);
 		//rooms
 		each(data.buddies, function(n, v){
 			history.init("multicast", v.id, v.history);
@@ -82,8 +82,12 @@ extend(webim.prototype, objectExtend,{
 		room.options.ticket = data.connection.ticket;
 		//handle new messages
 		var n_msg = data.new_messages;
-		if(n_msg && n_msg.length)
+		if(n_msg && n_msg.length){
+			each(n_msg, function(n, v){
+				v["new"] = true;
+			});
 			self.trigger("message",[n_msg]);
+		}
 		self.trigger("go",[data]);
 		self.connection.connect(data.connection);
 	},
@@ -91,6 +95,7 @@ extend(webim.prototype, objectExtend,{
 		var self = this;
 		window.onbeforeunload = self._unloadFun;
 		self.data.user.presence = "offline";
+		self.data.user.show = "unavailable";
 		self.buddy.clear();
 		self.trigger("stop", msg);
 	},
@@ -98,7 +103,7 @@ extend(webim.prototype, objectExtend,{
 		return !this.status.get("o");
 	},
 	_initEvents: function(){
-		var self = this, status = self.status, setting = self.setting, history = self.history, connection = self.connection;
+		var self = this, status = self.status, setting = self.setting, history = self.history, connection = self.connection, buddy = self.buddy;
 		connection.bind("connect",function(e, data){
 		}).bind("data",function(data){
 			self.handle(data);
@@ -106,6 +111,36 @@ extend(webim.prototype, objectExtend,{
 			self._stop("connect error");
 		}).bind("close",function(data){
 			self._stop("disconnect");
+		});
+		self.bind("message", function(data){
+			var online_ids = [], l = data.length, uid = self.data.user.id, v, id, type;
+			//When revice a new message from router server, make the buddy online.
+			for(var i = 0; i < l; i++){
+				v = data[i];
+				type = v["type"];
+				id = type == "unicast" ? (v.to == uid ? v.from : v.to) : v.to;
+				v["id"] = id;
+				if(type == "unicast" && !v["new"]){
+					online_ids.push(id);
+				}
+			}
+			if(online_ids.length)buddy.online(online_ids);
+			history.handle(data);
+		});
+		function grepOffline(msg){
+			return msg.type == "offline";
+		}
+		function grepOnline(msg){
+			return msg.type == "online";
+		}
+		function mapFrom(a){ return a.from; }
+
+		self.bind("presence",function(data){
+			offline = grep(data, grepOffline);
+			online = grep(data, grepOnline);
+			buddy.online(map(online, mapFrom));
+			buddy.offline(map(offline, mapFrom));
+			//online.length && buddyUI.notice("buddyOnline", online.pop()["nick"]);
 		});
 	},
 	handle: function(data){
@@ -120,7 +155,6 @@ extend(webim.prototype, objectExtend,{
 		ajax({
 			type: 'post',
 			url: self.options.urls.message,
-			type: 'post',
 			cache: false,
 			data: msg
 		});
@@ -131,42 +165,55 @@ extend(webim.prototype, objectExtend,{
 		ajax({
 			type: 'post',
 			url: self.options.urls.status,
-			type: 'post',
 			cache: false,
 			data: msg
 		});
 	},
-	setStranger: function(ids){
-		this.stranger_ids = idsArray(ids);
+	sendPresence: function(msg){
+		var self = this;
+		msg.ticket = self.data.connection.ticket;
+		self.status.set("s", msg.show);
+		ajax({
+			type: 'post',
+			url: self.options.urls.presence,
+			cache: false,
+			data: msg
+		});
 	},
-	stranger_ids: [],
-	online:function(){
-		var self = this, status = self.status, buddy_ids = [], room_ids = [], tabs = status.get("tabs"), tabIds = status.get("tabIds");
-		//set auto open true
-		status.set("o", false);
-		self._ready();
+	//setStranger: function(ids){
+	//	this.stranger_ids = idsArray(ids);
+	//},
+	//stranger_ids: [],
+	online:function(params){
+		var self = this, status = self.status;
+		var buddy_ids = [], room_ids = [], tabs = status.get("tabs"), tabIds = status.get("tabIds");
 		if(tabIds && tabIds.length && tabs){
 			each(tabs, function(k,v){
-				v["t"] == "buddy" && buddy_ids.push(k.slice(2));
-			});
-			each(tabs, function(k,v){
-				v["t"] == "room" && room_ids.push(k.slice(2));
+				if(k[0] == "b") buddy_ids.push(k.slice(2));
+				if(k[0] == "r") room_ids.push(k.slice(2));
 			});
 		}
+		params = extend({                                
+			//stranger_ids: self.stranger_ids.join(","),
+			buddy_ids: buddy_ids.join(","),
+			room_ids: room_ids.join(","),
+			show: status.get("s") || "available"
+		}, params);
+		self._ready(params);
+		//set auto open true
+		status.set("o", false);
+		status.set("s", params.show);
+
 		ajax({
 			type:"post",
 			dataType: "json",
-			data:{                                
-				buddy_ids: buddy_ids.join(","),
-				room_ids: room_ids.join(","),
-				stranger_ids: self.stranger_ids.join(",")
-			},
+			data: params,
 			url: self.options.urls.online,
 			success: function(data){
 				if(!data || !data.user || !data.connection){
 					self._stop("online error");
 				}else{
-					data.user = extend(self.data.user, data.user);
+					data.user = extend(self.data.user, data.user, {presence: "online"});
 					self.data = data;
 					self._go();
 				}
@@ -175,7 +222,6 @@ extend(webim.prototype, objectExtend,{
 				self._stop("online error");
 			}
 		});
-
 	},
 	offline:function(){
 		var self = this, data = self.data;

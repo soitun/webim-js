@@ -6,7 +6,7 @@ data []所有信息 readonly
 methods:
 get(id)
 handle(data) //handle data and distribute events
-online(ids, loadDelay) // 
+online(ids) // 
 loadDelay()
 offline(ids)
 update(ids) 更新用户信息 有更新时触发events:update
@@ -52,8 +52,8 @@ model("buddy", {
 	get: function(id){
 		return this.dataHash[id];
 	},
-	online: function(ids, loadDelay){
-		this.changeStatus(ids, "online", true, loadDelay);
+	online: function(ids){
+		this.changeStatus(ids, "online", true);
 	},
 	offline: function(ids){
 		this.changeStatus(ids, "offline", false);
@@ -68,7 +68,7 @@ model("buddy", {
 	update: function(ids){
 		this.load(ids);
 	},
-	changeStatus:function(ids, type, needLoad, loadDelay){
+	changeStatus:function(ids, type, needLoad){
 		ids = idsArray(ids);
 		var l = ids.length;
 		if(l){
@@ -91,7 +91,7 @@ model("buddy", {
 
 			}
 			self.handle(statusData);
-			if(needLoad && !loadDelay)self.loadDelay();
+			if(needLoad && !self.options.loadDelay)self.loadDelay();
 			else if(delayData.length){
 				if(needLoad)self.trigger(type + "Delay", [delayData]);
 				else self.trigger(type , [delayData]);
@@ -134,6 +134,7 @@ model("buddy", {
 		for(var i in addData){
 			v = addData[i], id = v.id;
 			if(id){
+				v.show = v.show ? v.show : (v.presence == "offline" ? "unavailable" : "available");
 				if(!dataHash[id]){
 					dataHash[id] = {};
 					data.push(dataHash[id]);
@@ -145,13 +146,10 @@ model("buddy", {
 					extend(dataHash[id], add);
 					status[type].push(dataHash[id]);
 				}
-
 			}
 		}
 		for (var key in status) {
 			self.trigger(key, [status[key]]);
 		}
-
 	}
-
 });

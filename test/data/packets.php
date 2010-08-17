@@ -1,8 +1,8 @@
 <?php 
 $callback = empty($_GET["callback"]) ? "" : $_GET["callback"];
 $timeout = empty($_GET["timeout"]) ? 5 : $_GET["timeout"];
-//sleep( $timeout );
-$data = '{"status": "ok", "messages": [{"type":"unicast","to":"jack","from":"susan","nick":"Susan","style":"","body":"Hi.","timestamp":1246883572400}], "statuses": [], "presences": []}';
+sleep( $timeout );
+$data = '{"status": "ok", "messages": [{"type":"unicast","to":"1","from":"2","nick":"Susan","style":"color:red;","body":"Hi.","timestamp":'.(string)(microtime(true)*1000).'},{"type":"multicast","to":"2","from":"2","nick":"Susan","style":"","body":"Someone.","timestamp":'.(string)(microtime(true)*1000).'}], "statuses": [], "presences": [{"from": "3", "to": "1", "type": "offline"}, {"from": "5", "to": "1", "type": "online"}]}';
 if(empty($callback)){
 	echo $data;
 }else{

@@ -3,6 +3,7 @@ webim.defaults.urls = {
 	online: _path + "data/online.php",
 	offline: _path + "data/offline.php",
 	message: _path + "data/message.php",
+	presence: _path + "data/presence.php",
 	refresh: _path + "data/refresh.php",
 	status: _path + "data/status.php"
 };
@@ -15,5 +16,5 @@ webim.buddy.defaults.url = _path + "data/buddies.php";
 webim.room.defaults.urls = {
 	join: _path + "data/join.php",
 	leave: _path + "data/leave.php",
-	members: _path + "data/members.php"
+	member: _path + "data/members.php"
 };

@@ -13,7 +13,7 @@ handle(data) //handle data and distribute events
 events:
 unicast //id,data
 multicast //id,data
-clear //
+clear //type, id
 */
 
 model("history",{

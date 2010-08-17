@@ -99,7 +99,7 @@
 					}
 				}
 				if(!member){
-					info.name = info.nick || info.name;
+					info.nick = info.nick;
 					members.push(info);
 					room.members.length;
 					self.trigger("addMember",[room_id, info]);
@@ -138,9 +138,7 @@
 					id: id
 				},
 				success: function(data){
-					each(data,function(k,v){
-						self.addMember(k,v);
-					});
+					self.addMember(id, data);
 				}
 			});
 		},
@@ -153,7 +151,7 @@
 				data: {
 					ticket: options.ticket,
 					id: id,
-					nick: user.name
+					nick: user.nick
 				},
 				success: function(data){
 					//self.trigger("join",[data]);
@@ -172,7 +170,7 @@
 					data: {
 						ticket: options.ticket,
 						id: id,
-						nick: user.name
+						nick: user.nick
 					}
 				});
 				self.trigger("leave",[d]);

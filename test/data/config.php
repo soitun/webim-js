@@ -8,9 +8,8 @@ $connection = array(
 
 $user = array(
 	"id" => 1,
-	"name" => "jack",
 	"nick" => "Jack",
-	"pic_url" => "http://t1.qlogo.cn/mbloghead/c39e95b85b1b6bcd6f84/50",
+	"pic_url" => "images/a.jpg",
 	"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
 	"url" => "#1",
 	"show" => "available",
@@ -21,10 +20,9 @@ $user = array(
 $buddies = array(
 	array(
 		"id" => 2,
-		"name" => "susan",
 		"nick" => "Susan",
 		"group" => "friend",
-		"pic_url" => "http://t1.qlogo.cn/mbloghead/a061e4ecb5b1ecd6ccee/50",
+		"pic_url" => "images/b.jpg",
 		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
 		"url" => "#2",
 		"presence" => "online",
@@ -34,10 +32,9 @@ $buddies = array(
 	),
 	array(
 		"id" => 3,
-		"name" => "lily",
 		"nick" => "Lily",
 		"group" => "stronger",
-		"pic_url" => "http://t3.qlogo.cn/mbloghead/75e6cf5f9a3fdad21794/50",
+		"pic_url" => "images/c.jpg",
 		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
 		"url" => "#3",
 		"presence" => "online",
@@ -47,10 +44,9 @@ $buddies = array(
 	),
 	array(
 		"id" => 4,
-		"name" => "janet",
 		"nick" => "Janet",
 		"group" => "schoolmete",
-		"pic_url" => "http://t3.qlogo.cn/mbloghead/ad9f19633ee7f8012aac/50",
+		"pic_url" => "images/e.jpg",
 		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
 		"url" => "#4",
 		"presence" => "online",
@@ -60,10 +56,9 @@ $buddies = array(
 	),
 	array(
 		"id" => 5,
-		"name" => "josh",
 		"nick" => "Josh",
 		"group" => "friend",
-		"pic_url" => "http://t3.qlogo.cn/mbloghead/9f48b84fc658ef74e2e2/50",
+		"pic_url" => "images/d.jpg",
 		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
 		"url" => "#4",
 		"presence" => "offline",
@@ -76,9 +71,8 @@ $buddies = array(
 $rooms = array(
 	array(
 		"id" => 1,
-		"name" => "room_1",
 		"nick" => "Happy Day",
-		"pic_url" => "http://t0.qlogo.cn/mbloghead/11b25271cf9d3f4b176e/50",
+		"pic_url" => "images/m.jpg",
 		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
 		"url" => "#4",
 		"all_count" => 5,
@@ -87,9 +81,8 @@ $rooms = array(
 	),
 	array(
 		"id" => 2,
-		"name" => "room_2",
 		"nick" => "Happy Week",
-		"pic_url" => "http://t0.qlogo.cn/mbloghead/11b25271cf9d3f4b176e/50",
+		"pic_url" => "images/n.jpg",
 		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
 		"url" => "#4",
 		"all_count" => 5,
@@ -101,22 +94,18 @@ $rooms = array(
 $members = array(
 	array(
 		"id" => 2,
-		"name" => "susan",
 		"nick" => "Susan"
 	),
 	array(
 		"id" => 3,
-		"name" => "lily",
 		"nick" => "Lily"
 	),
 	array(
 		"id" => 4,
-		"name" => "janet",
 		"nick" => "Janet"
 	),
 	array(
 		"id" => 5,
-		"name" => "josh",
 		"nick" => "Josh"
 	)
 );

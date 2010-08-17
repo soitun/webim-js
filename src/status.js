@@ -1,9 +1,9 @@
 /*
 * 状态(cookie临时存储[刷新页面有效])
-* webim.status.init(status);//初始化状态
-* webim.status.all //所有状态
-* webim.status(key);//get
-* webim.status(key,value);//set
+* 
+* get(key);//get
+* set(key,value);//set
+* clear()
 */
 //var d = {
 //        tabs:{1:{n:5}}, // n -> notice count
