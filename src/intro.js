@@ -1,6 +1,6 @@
 /*!
  * Webim v@VERSION
- * http://www.nextim.cn/
+ * http://www.webim20.cn/
  *
  * Copyright (c) 2009 Hidden
  *
