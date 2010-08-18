@@ -142,19 +142,21 @@ extend(comet.prototype, objectExtend, {
         _onPollSuccess: function(d){
                 var self = this;
                 self._onPolling = false;
-		if (!self._connecting) 
-			return;//已断开连接
-		if(!d || !d.status){
-			return self._onError('error data');
+		if (self._connecting){
+			if(!d || !d.status){
+				return self._onError('error data');
+			}else{
+				//d = window["eval"](d.replace("airtest","")); //fortest
+				if (self._pollingTimes == 1){
+					self._onConnect();
+				}
+				self._onData(d);
+				self._failTimes = 0;//连接成功 失败累加清零
+				self._pollTimer = window.setTimeout(function(){
+					self._startPolling();
+				}, 200);
+			}
 		}
-                //d = window["eval"](d.replace("airtest","")); //fortest
-                if (self._pollingTimes == 1) 
-                self._onConnect();
-                self._onData(d);
-                self._failTimes = 0;//连接成功 失败累加清零
-                self._pollTimer = window.setTimeout(function(){
-                        self._startPolling();
-                }, 200);
         },
         _onPollError: function(m){
                 var self = this;
