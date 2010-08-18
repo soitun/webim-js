@@ -18,9 +18,7 @@ BASE_FILES = ${SRC_DIR}/core.js\
 	${SRC_DIR}/status.js\
 	${SRC_DIR}/buddy.js\
 	${SRC_DIR}/room.js\
-	${SRC_DIR}/notification.js\
 	${SRC_DIR}/history.js \
-	${SRC_DIR}/hotpost.js\
 
 
 WEBIM_FILES = ${SRC_DIR}/intro.js\
@@ -28,14 +26,15 @@ WEBIM_FILES = ${SRC_DIR}/intro.js\
 	${SRC_DIR}/outro.js
 
 WEBIM_VER = `cat ${PREFIX}/version.txt`
-DATE=`svn info . | grep Date: | sed 's/.*: //g'`
-REV=`svn info . | grep Rev: | sed 's/.*: //g'`
+DATE=`git log -n 1 | grep Date: | sed 's/Date:   //g'`
+COMMIT=`git log -n 1 | grep commit | sed 's/commit //g'`
 
-#REPLACE = sed 's/Date:./&'"${DATE}"'/' | \
-		sed 's/Revision:./&'"${REV}"'/' | \
+
+REPLACE = sed 's/Date:./&'"${DATE}"'/' | \
+		sed 's/Commit:./&'"${COMMIT}"'/' | \
 		sed s/@VERSION/${WEBIM_VER}/
 
-REPLACE = sed s/@VERSION/${WEBIM_VER}/
+#REPLACE = sed s/@VERSION/${WEBIM_VER}/
 
 MINJAR = java -jar ${BUILD_DIR}/yuicompressor-2.4.2.jar
 UNICODE = native2ascii -encoding utf-8 
@@ -54,13 +53,14 @@ dist:
 		${REPLACE} > ${WEBIM_JS};
 
 	@@echo "Merge"
+	@@echo ${WEBIM_JS}
 
 min:
 	@@echo "Building"
-	@@echo " - Compressing using Minifier"
+	@@echo " - Compressing"
 
 	@@${MINJAR} --type js ${WEBIM_JS} > ${WEBIM_MIN_JS}
-	@@echo ${WEBIM_MIN_JS} "Built"
+	@@echo ${WEBIM_MIN_JS}
 
 clean:
 	@@echo "Removing Distribution directory:" ${DIST_DIR}
