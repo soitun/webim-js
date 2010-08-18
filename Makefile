@@ -30,8 +30,8 @@ DATE=`git log -n 1 | grep Date: | sed 's/Date:   //g'`
 COMMIT=`git log -n 1 | grep commit | sed 's/commit //g'`
 
 
-REPLACE = sed 's/Date:./&'"${DATE}"'/' | \
-		sed 's/Commit:./&'"${COMMIT}"'/' | \
+REPLACE = sed 's/@DATE/'"${DATE}"'/' | \
+		sed 's/@COMMIT/'"${COMMIT}"'/' | \
 		sed s/@VERSION/${WEBIM_VER}/
 
 #REPLACE = sed s/@VERSION/${WEBIM_VER}/

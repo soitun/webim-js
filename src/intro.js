@@ -4,8 +4,8 @@
  *
  * Copyright (c) 2010 Hidden
  *
- * Date: 
- * Commit: 
+ * Date: @DATE
+ * Commit: @COMMIT
  */
 (function(window, document, undefined){
 
