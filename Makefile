@@ -26,8 +26,8 @@ WEBIM_FILES = ${SRC_DIR}/intro.js\
 	${SRC_DIR}/outro.js
 
 WEBIM_VER = `cat ${PREFIX}/version.txt`
-DATE=`git log -n 1 | grep Date: | sed 's/Date:   //g'`
-COMMIT=`git log -n 1 | grep commit | sed 's/commit //g'`
+DATE=`git log -n 1  --pretty=format:%ad`
+COMMIT=`git log -n 1 --pretty=format:%H`
 
 
 REPLACE = sed 's/@DATE/'"${DATE}"'/' | \
@@ -43,26 +43,27 @@ WEBIM_JS = ${DIST_DIR}/webim.js
 
 WEBIM_MIN_JS = ${DIST_DIR}/webim.min.js
 
-all: dist min
-	@@echo "webim build complete."
+all: ${DIST_DIR} ${WEBIM_JS} ${WEBIM_MIN_JS}
+	@@echo "Build complete."
 
-dist:
+${DIST_DIR}:
+	@@echo "Create distribution directory"
 	@@mkdir -p ${DIST_DIR}
+	@@echo "	"${DIST_DIR}
 
+${WEBIM_JS}: ${DIST_DIR}
+	@@echo "Merge file"
 	@@cat ${WEBIM_FILES} | \
 		${REPLACE} > ${WEBIM_JS};
+	@@echo "	"${WEBIM_JS}
 
-	@@echo "Merge"
-	@@echo ${WEBIM_JS}
-
-min:
-	@@echo "Building"
-	@@echo " - Compressing"
-
+${WEBIM_MIN_JS}: ${WEBIM_JS}
+	@@echo "Compressing..."
 	@@${MINJAR} --type js ${WEBIM_JS} > ${WEBIM_MIN_JS}
-	@@echo ${WEBIM_MIN_JS}
+	@@echo "	"${WEBIM_MIN_JS}
 
 clean:
-	@@echo "Removing Distribution directory:" ${DIST_DIR}
+	@@echo "Remove distribution directory" 
 	@@rm -rf ${DIST_DIR}
+	@@echo "	"${DIST_DIR}
 
