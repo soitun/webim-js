@@ -1,6 +1,5 @@
-/**
+/*
  * Cookie plugin
- *
  * Copyright (c) 2006 Klaus Hartl (stilbuero.de)
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
@@ -8,9 +7,8 @@
  *
  */
 
-/**
+/*
  * Create a cookie with the given name and value and other optional parameters.
- *
  * @example $.cookie('the_cookie', 'the_value');
  * @desc Set the value of a cookie.
  * @example $.cookie('the_cookie', 'the_value', { expires: 7, path: '/', domain: 'jquery.com', secure: true });
@@ -39,7 +37,7 @@
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
 
-/**
+/*
  * Get the value of a cookie with the given name.
  *
  * @example $.cookie('the_cookie');

@@ -1,4 +1,3 @@
-/**/
 /*
 buddy //联系人
 attributes：
