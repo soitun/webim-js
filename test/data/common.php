@@ -38,7 +38,7 @@ function gp($key = '',$def = null) {
 }
 
 function ids_array($ids){
-	return empty($ids) ? array() : (is_array($ids) ? array_unique($ids) : array_unique(split(",", $ids)));
+	return empty($ids) ? array() : (is_array($ids) ? array_unique($ids) : array_unique(explode(",", $ids)));
 }
 
 function ids_except($id, $ids){
