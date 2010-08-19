@@ -62,7 +62,7 @@ ${WEBIM_JS}: ${DIST_DIR}
 
 ${WEBIM_MIN_JS}: ${WEBIM_JS}
 	@@echo "Compressing..."
-	@@head -9 ${WEBIM_JS} > ${WEBIM_MIN_JS}
+	@@head -10 ${WEBIM_JS} > ${WEBIM_MIN_JS}
 	@@${JSMINJAR} --js ${WEBIM_JS} --warning_level QUIET >> ${WEBIM_MIN_JS}
 	@@echo "	"${WEBIM_MIN_JS}
 
