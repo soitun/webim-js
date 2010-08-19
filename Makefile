@@ -46,6 +46,9 @@ WEBIM_MIN_JS = ${DIST_DIR}/webim.min.js
 all: ${DIST_DIR} ${WEBIM_JS} ${WEBIM_MIN_JS}
 	@@echo "Build complete."
 
+webim: ${WEBIM_JS}
+	@@echo "Complete."
+
 ${DIST_DIR}:
 	@@echo "Create distribution directory"
 	@@mkdir -p ${DIST_DIR}
