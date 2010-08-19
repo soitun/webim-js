@@ -36,7 +36,7 @@ REPLACE = sed 's/@DATE/'"${DATE}"'/' | \
 
 #REPLACE = sed s/@VERSION/${WEBIM_VER}/
 
-MINJAR = java -jar ${BUILD_DIR}/yuicompressor-2.4.2.jar
+JSMINJAR = java -jar ${BUILD_DIR}/google-compiler-20100616.jar
 UNICODE = native2ascii -encoding utf-8 
 
 WEBIM_JS = ${DIST_DIR}/webim.js
@@ -59,7 +59,7 @@ ${WEBIM_JS}: ${DIST_DIR}
 
 ${WEBIM_MIN_JS}: ${WEBIM_JS}
 	@@echo "Compressing..."
-	@@${MINJAR} --type js ${WEBIM_JS} > ${WEBIM_MIN_JS}
+	@@${JSMINJAR} --js ${WEBIM_JS} --warning_level QUIET > ${WEBIM_MIN_JS}
 	@@echo "	"${WEBIM_MIN_JS}
 
 clean:
