@@ -274,7 +274,16 @@ window.webim = webim;
 
 extend(webim,{
 	version:"@VERSION",
-	defaults:{},
+	defaults:{
+		urls:{
+			online: "webim/online",
+			offline: "webim/offline",
+			message: "webim/message",
+			presence: "webim/presence",
+			refresh: "webim/refresh",
+			status: "webim/status"
+		}
+	},
 	log:log,
 	idsArray: idsArray,
 	now: now,

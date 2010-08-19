@@ -17,7 +17,7 @@ clear //type, id
 */
 
 model("history",{
-	urls:{load:"", clear:""}
+	urls:{load:"webim/history", clear:"webim/clear_history"}
 }, {
 	_init:function(){
 		this.data = this.data || {};
