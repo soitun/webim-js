@@ -46,7 +46,7 @@ $buddies = array(
 		"id" => 4,
 		"nick" => "Janet",
 		"group" => "schoolmete",
-		"pic_url" => "images/e.jpg",
+		"pic_url" => "images/im.png",
 		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
 		"url" => "#4",
 		"presence" => "online",
@@ -56,9 +56,9 @@ $buddies = array(
 	),
 	array(
 		"id" => 5,
-		"nick" => "Josh",
+		"nick" => "Lucy",
 		"group" => "friend",
-		"pic_url" => "images/d.jpg",
+		"pic_url" => "images/e.jpg",
 		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
 		"url" => "#4",
 		"presence" => "offline",
@@ -125,7 +125,7 @@ foreach($buddies as $i => $o){
 			"nick" => $o["nick"],
 			"from" => $o["id"],
 			"style" => "",
-			"body" => "Hi.",
+			"body" => "Hello world.",
 			"timestamp" => 1246883572400
 		),
 		array(
@@ -134,7 +134,7 @@ foreach($buddies as $i => $o){
 			"from" => 1,
 			"to" => $o["id"],
 			"style" => "",
-			"body" => "Hello.",
+			"body" => "Hello kitty.",
 			"timestamp" => 1246883582400
 		)
 	);
@@ -148,7 +148,7 @@ foreach($rooms as $i => $o){
 			"from" => 1,
 			"to" => $o["id"],
 			"style" => "",
-			"body" => "People?",
+			"body" => "Is anyone here?",
 			"timestamp" => 1246883572400
 		),
 		array(
