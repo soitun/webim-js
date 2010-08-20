@@ -122,6 +122,7 @@ foreach($buddies as $i => $o){
 		array(
 			"type" => "unicast",
 			"to" => 1,
+			"nick" => $o["nick"],
 			"from" => $o["id"],
 			"style" => "",
 			"body" => "Hi.",
@@ -129,6 +130,7 @@ foreach($buddies as $i => $o){
 		),
 		array(
 			"type" => "unicast",
+			"nick" => "Jack",
 			"from" => 1,
 			"to" => $o["id"],
 			"style" => "",
@@ -142,6 +144,7 @@ foreach($rooms as $i => $o){
 	$histories["multicast"][$o["id"]] = array(
 		array(
 			"type" => "multicast",
+			"nick" => "Jack",
 			"from" => 1,
 			"to" => $o["id"],
 			"style" => "",
@@ -150,6 +153,7 @@ foreach($rooms as $i => $o){
 		),
 		array(
 			"type" => "unicast",
+			"nick" => "Susan",
 			"from" => 2,
 			"to" => $o["id"],
 			"style" => "",
