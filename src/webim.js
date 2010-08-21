@@ -63,14 +63,19 @@ extend(webim.prototype, objectExtend,{
 	_go: function(){
 		var self = this, data = self.data, history = self.history, buddy = self.buddy, room = self.room;
 		history.option("userInfo", data.user);
-		buddy.handle(data.buddies);
+		var ids = [], buddies = [];
 		each(data.buddies, function(n, v){
+			if(v.need_reload){
+				ids.push(v.id);
+			}else{
+				buddies.push(v);
+			}
 			history.init("unicast", v.id, v.history);
 		});
-		//buddy load delay
-		buddy.online(data.online_buddy_ids);
+		buddy.online(ids);
+		buddy.handle(data.buddies);
 		//rooms
-		each(data.buddies, function(n, v){
+		each(data.rooms, function(n, v){
 			history.init("multicast", v.id, v.history);
 		});
 		//blocked rooms
