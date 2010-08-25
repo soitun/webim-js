@@ -23,7 +23,17 @@ $output = array(
 	"connection" => $connection,
 	"buddies" => $output_buddies,
 	"rooms" => $rooms,
-	"new_messages" => array()
+	"new_messages" => array(
+		array(
+			"type" => "unicast",
+			"to" => 1,
+			"nick" => "Susan",
+			"from" => 2,
+			"style" => "",
+			"body" => "Hello world.",
+			"timestamp" => 1246883572400
+		)
+	)
 );
 
 echo json_encode($output);

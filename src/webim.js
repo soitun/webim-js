@@ -85,7 +85,9 @@ extend(webim.prototype, objectExtend,{
 		});
 		room.handle(roomData);
 		room.options.ticket = data.connection.ticket;
-		//handle new messages
+		self.trigger("go",[data]);
+		self.connection.connect(data.connection);
+		//handle new messages at last
 		var n_msg = data.new_messages;
 		if(n_msg && n_msg.length){
 			each(n_msg, function(n, v){
@@ -93,8 +95,6 @@ extend(webim.prototype, objectExtend,{
 			});
 			self.trigger("message",[n_msg]);
 		}
-		self.trigger("go",[data]);
-		self.connection.connect(data.connection);
 	},
 	_stop: function(msg){
 		var self = this;
