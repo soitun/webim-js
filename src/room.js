@@ -142,8 +142,9 @@
 				}
 			});
 		},
-		join:function(id,user){
-			var self = this, options = self.options;
+		join:function(id){
+			var self = this, options = self.options, user = options.user;
+
 			ajax({
 				cache: false,
 				type: "post",
@@ -161,8 +162,8 @@
 				}
 			});
 		},
-		leave: function(id,user){
-			var self = this, options = self.options, d = self.dataHash[id];
+		leave: function(id){
+			var self = this, options = self.options, d = self.dataHash[id], user = options.user;
 			if(d){
 				d.initMember = false;
 				ajax({

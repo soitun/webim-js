@@ -40,17 +40,21 @@ function webim(element, options){
 }
 
 extend(webim.prototype, objectExtend,{
-	_init:function(){
+	_init: function(){
 		var self = this;
-		self.data = {user:{}};
+		var user = {};
+		self.data = {user: user};
 		self.status = new webim.status();
 		self.setting = new webim.setting();
 		self.buddy = new webim.buddy(null, {loadDelay: !self.status.get("b")});
-		self.room = new webim.room();
-		self.history = new webim.history();
+		self.room = new webim.room(null, {user: user});
+		self.history = new webim.history(null, {user: user});
 		self.connection = new comet(null,{jsonp:true});
 		self._initEvents();
 		//self.online();
+	},
+	user: function(info){
+		extend(self.data.user, info);
 	},
 	_ready: function(post_data){
 		var self = this;
