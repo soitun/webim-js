@@ -54,7 +54,7 @@ extend(webim.prototype, objectExtend,{
 		//self.online();
 	},
 	user: function(info){
-		extend(self.data.user, info);
+		extend(this.data.user, info);
 	},
 	_ready: function(post_data){
 		var self = this;
