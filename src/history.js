@@ -70,6 +70,7 @@ model("history",{
 		self.trigger("clear", [type, id]);
 		ajax({
 			url: options.urls.clear,
+			type: "post",
 			cache: false,
 			//dataType: "json",
 			data:{ type: type, id: id}
@@ -88,6 +89,7 @@ model("history",{
 		ajax({
 			url: options.urls.load,
 			cache: false,
+			type: "get",
 			dataType: "json",
 			data:{type: type, id: id},
 			//context: self,

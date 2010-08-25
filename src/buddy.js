@@ -116,6 +116,7 @@ model("buddy", {
 		if(ids.length){
 			var self = this, options = self.options;
 			ajax({
+				type: "get",
 				url: options.url,
 				cache: false,
 				dataType: "json",

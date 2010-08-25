@@ -129,6 +129,7 @@
 		loadMember: function(id){
 			var self = this, options = self.options;
 			ajax({
+				type: "get",
 				cache: false,
 				url: options.urls.member,
 				dataType: "json",
@@ -145,6 +146,7 @@
 			var self = this, options = self.options;
 			ajax({
 				cache: false,
+				type: "post",
 				url: options.urls.join,
 				dataType: "json",
 				data: {
@@ -165,6 +167,7 @@
 				d.initMember = false;
 				ajax({
 					cache: false,
+					type: "post",
 					url: options.urls.leave,
 					data: {
 						ticket: options.ticket,
