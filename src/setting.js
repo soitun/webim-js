@@ -11,6 +11,7 @@
 model("setting",{
 	url: "/webim/setting",
 	data: {
+		blocked_rooms: [],
 		play_sound:true,
 		buddy_sticky:true,
 		minimize_layout: false,
