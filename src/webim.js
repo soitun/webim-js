@@ -77,7 +77,7 @@ extend(webim.prototype, objectExtend,{
 			history.init("unicast", v.id, v.history);
 		});
 		buddy.online(ids);
-		buddy.handle(data.buddies);
+		buddy.handle(buddies);
 		//rooms
 		each(data.rooms, function(n, v){
 			history.init("multicast", v.id, v.history);
