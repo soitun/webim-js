@@ -42,7 +42,8 @@ function webim(element, options){
 extend(webim.prototype, objectExtend,{
 	_init: function(){
 		var self = this;
-		var user = {};
+		//Default user status info.
+		var user = {presence: 'offline', show: 'unavailable'};
 		self.data = {user: user};
 		self.status = new webim.status();
 		self.setting = new webim.setting();
