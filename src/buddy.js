@@ -67,6 +67,17 @@ model("buddy", {
 	update: function(ids){
 		this.load(ids);
 	},
+	presence: function(data){
+		data = isArray(data) ? data : [data];
+		//Complete presence info.
+		for(var i in data){
+			var v = data[i];
+			v.presence = v.presence || "online";
+			v.show = v.show ? v.show : (v.presence == "offline" ? "unavailable" : "available");
+			v.need_reload = true;
+		}
+		this.handle(data);
+	},
 	changeStatus:function(ids, type, needLoad){
 		ids = idsArray(ids);
 		var l = ids.length;
@@ -96,7 +107,6 @@ model("buddy", {
 				else self.trigger(type , [delayData]);
 			}
 		}
-
 	},
 	_loadSuccess:function(data){
 		var self = this.self || this, cache = self._cacheData, l = data.length, value , id;
@@ -126,14 +136,15 @@ model("buddy", {
 			});
 		}
 	},
-	handle:function(addData){
-		var self = this, data = self.data, dataHash = self.dataHash, status = {};
+	handle:function(addData, need_reload){
+		var self = this, data = self.data, dataHash = self.dataHash, status = {}, cache = self._cacheData;
 		addData = addData || [];
 		var l = addData.length , v, type, add;
 		//for(var i = 0; i < l; i++){
 		for(var i in addData){
 			v = addData[i], id = v.id;
 			if(id){
+				//need_reload
 				v.show = v.show ? v.show : (v.presence == "offline" ? "unavailable" : "available");
 				if(!dataHash[id]){
 					dataHash[id] = {};
