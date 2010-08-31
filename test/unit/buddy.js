@@ -1,25 +1,24 @@
 module("buddy");
 
-test("webim.buddy - basic method", 7, function() {
+test("webim.buddy - basic method", 9, function(){
 	stop(3000);
-	var buddy = new webim.buddy(buddies, {loadDelay: true});
+	var buddy = new webim.buddy(buddies, {active: false});
 	buddy.bind("online", function(data){
-		ok(true, "online event");
-		if(data[0]["id"] == 4)start();
+		ok(true, "online event:" + JSON.encode(data));
 	});
 	buddy.bind("offline", function(data){
-		ok(data[0], "offline event");
+		ok(data[0], "offline event:" + JSON.encode(data));
 	});
-	buddy.bind("onlineDelay", function(data){
-		ok(data.length == 2, "onlineDelay event");
+	buddy.bind("update", function(data){
+		ok(data[0], "update event:" + JSON.encode(data));
+		if(data[0]["id"] == 4)start();
 	});
 	ok(buddy.get(2), "get");
+	ok(buddy.count() == 3, "count");
 	buddy.clear();
 	ok(!buddy.get(2), "clear");
-	buddy.online("2,3");
-	buddy.offline("3");
-	ok(!buddy.get(2), "delay");
-	buddy.loadDelay();
-	buddy.option("loadDelay", false);
-	buddy.online(4);
+	buddy.presence([{id: 2, presence: "online"}, {id: 3, presence: "offline"}, {id: 2, presence: "show", show: "away"}]);
+	buddy.complete();
+	buddy.option("active", true);
+	buddy.presence([{id: 4, presence: "online"}]);
 });

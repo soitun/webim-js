@@ -9,7 +9,7 @@ $output_buddies = array();
 $online_ids = array("4", "5", "6", 7,8,9,10,11,12,13);
 foreach($buddies as $i => $b){
 	if(in_array($b["id"], $online_ids)){
-		$b["need_reload"] = true;
+		$b["incomplete"] = true;
 	}
 
 	if(in_array(($b["id"]), $buddy_ids) || in_array($b["id"], $online_ids)){

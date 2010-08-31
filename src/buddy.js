@@ -1,21 +1,19 @@
-/*
-buddy //联系人
-attributes：
-data []所有信息 readonly 
-methods:
-get(id)
-handle(data) //handle data and distribute events
-online(ids) // 
-loadDelay()
-offline(ids)
-update(ids) 更新用户信息 有更新时触发events:update
+/**
+ * buddy //联系人
+ * attributes：
+ * 	data []所有信息 readonly 
+ * methods:
+ * 	get(id)
+ * 	handle(data) //handle data and distribute events
+ * 	presence(data) //handle buddy presence.
+ * 	complete() //Complete info.
+ * 	update(ids) 更新用户信息 有更新时触发events:update
 
-events:
-online  //  data:[]
-onlineDelay
-offline  //  data:[]
-update 
-*/
+ * events:
+ * 	online  //  data:[]
+ * 	offline  //  data:[]
+ * 	update 
+ */
 
 model("buddy", {
 	url:"/webim/buddy"
@@ -24,17 +22,15 @@ model("buddy", {
 		var self = this;
 		self.data = self.data || [];
 		self.dataHash = {};
-		self._cacheData = {};
 		self.handle(self.data);
 	},
 	clear:function(){
 		var self =this;
 		self.data = [];
 		self.dataHash = {};
-		self._cacheData = {};
 	},
 	count: function(conditions){
-		var data = extend({}, this.dataHash, this._cacheData), count = 0, t;
+		var data = this.dataHash, count = 0, t;
 		for(var key in data){
 			if(isObject(conditions)){
 				t = true;
@@ -51,73 +47,27 @@ model("buddy", {
 	get: function(id){
 		return this.dataHash[id];
 	},
-	online: function(ids){
-		this.changeStatus(ids, "online", true);
-	},
-	offline: function(ids){
-		this.changeStatus(ids, "offline", false);
-	},
-	loadDelay: function(){
-		var self = this, cache = self._cacheData, cache_ids = [];
-		for(var key in cache){
-			cache_ids.push(key);
+	complete: function(){
+		var self = this, data = self.dataHash, ids = [], v;
+		for(var key in data){
+			v = data[key];
+			if(v.incomplete && v.presence == 'online')ids.push(key);
 		}
-		self.load(cache_ids);
+		self.load(ids);
 	},
 	update: function(ids){
 		this.load(ids);
 	},
 	presence: function(data){
+		var self = this, dataHash = self.dataHash;
 		data = isArray(data) ? data : [data];
 		//Complete presence info.
 		for(var i in data){
 			var v = data[i];
-			v.presence = v.presence || "online";
+			//Presence in [show,offline,online]
+			v.presence = v.presence == "offline" ? "offline" : "online";
 			v.show = v.show ? v.show : (v.presence == "offline" ? "unavailable" : "available");
-			v.need_reload = true;
-		}
-		this.handle(data);
-	},
-	changeStatus:function(ids, type, needLoad){
-		ids = idsArray(ids);
-		var l = ids.length;
-		if(l){
-			var self = this, cache = self._cacheData, dataHash = self.dataHash, statusData = [], id, delayData = [], dd;
-			for(var i = 0; i < l; i++){
-				id = ids[i];
-				if(dataHash[id]){
-					statusData.push({id:id, presence:type});
-				}
-				else{
-					dd = {id:id, presence:type};
-					if(!cache[id] || cache[id].presence != type)delayData.push(dd);
-					if(needLoad){
-						cache[id] = dd;
-					}else{
-						if(cache[id])
-							delete cache[id];
-					}
-				}
-
-			}
-			self.handle(statusData);
-			if(needLoad && !self.options.loadDelay)self.loadDelay();
-			else if(delayData.length){
-				if(needLoad)self.trigger(type + "Delay", [delayData]);
-				else self.trigger(type , [delayData]);
-			}
-		}
-	},
-	_loadSuccess:function(data){
-		var self = this.self || this, cache = self._cacheData, l = data.length, value , id;
-		//for(var i = 0; i < l; i++){
-		for(var i in data){
-			value = data[i];
-			id = value["id"];
-			if(cache[id]){
-				extend(value, cache[id]);
-				delete cache[id];
-			}
+			v.incomplete = !dataHash[v.id];
 		}
 		self.handle(data);
 	},
@@ -132,24 +82,25 @@ model("buddy", {
 				dataType: "json",
 				data:{ ids: ids.join(",")},
 				context: self,
-				success: self._loadSuccess
+				success: self.handle
 			});
 		}
 	},
-	handle:function(addData, need_reload){
-		var self = this, data = self.data, dataHash = self.dataHash, status = {}, cache = self._cacheData;
+	handle: function(addData){
+		var self = this, data = self.data, dataHash = self.dataHash, status = {};
 		addData = addData || [];
 		var l = addData.length , v, type, add;
 		//for(var i = 0; i < l; i++){
 		for(var i in addData){
 			v = addData[i], id = v.id;
 			if(id){
-				//need_reload
-				v.show = v.show ? v.show : (v.presence == "offline" ? "unavailable" : "available");
 				if(!dataHash[id]){
+					v.presence = v.presence || "online";
+					v.show = v.show ? v.show : (v.presence == "offline" ? "unavailable" : "available");
 					dataHash[id] = {};
 					data.push(dataHash[id]);
 				}
+				v.incomplete = !!v.incomplete;
 				add = checkUpdate(dataHash[id], v);
 				if(add){
 					type = add.presence || "update";
@@ -162,5 +113,6 @@ model("buddy", {
 		for (var key in status) {
 			self.trigger(key, [status[key]]);
 		}
+		self.options.active && self.complete();
 	}
 });

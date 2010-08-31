@@ -47,7 +47,7 @@ extend(webim.prototype, objectExtend,{
 		self.data = {user: user};
 		self.status = new webim.status();
 		self.setting = new webim.setting();
-		self.buddy = new webim.buddy(null, {loadDelay: !self.status.get("b")});
+		self.buddy = new webim.buddy(null, {active: self.status.get("b")});
 		self.room = new webim.room(null, {user: user});
 		self.history = new webim.history(null, {user: user});
 		self.connection = new comet(null,{jsonp:true});
@@ -68,17 +68,11 @@ extend(webim.prototype, objectExtend,{
 	_go: function(){
 		var self = this, data = self.data, history = self.history, buddy = self.buddy, room = self.room;
 		history.option("userInfo", data.user);
-		var ids = [], buddies = [];
+		var ids = [];
 		each(data.buddies, function(n, v){
-			if(v.need_reload){
-				ids.push(v.id);
-			}else{
-				buddies.push(v);
-			}
 			history.init("unicast", v.id, v.history);
 		});
-		buddy.online(ids);
-		buddy.handle(buddies);
+		buddy.handle(data.buddies);
 		//rooms
 		each(data.rooms, function(n, v){
 			history.init("multicast", v.id, v.history);
@@ -123,7 +117,7 @@ extend(webim.prototype, objectExtend,{
 			self._stop("disconnect");
 		});
 		self.bind("message", function(data){
-			var online_ids = [], l = data.length, uid = self.data.user.id, v, id, type;
+			var online_buddies = [], l = data.length, uid = self.data.user.id, v, id, type;
 			//When revice a new message from router server, make the buddy online.
 			for(var i = 0; i < l; i++){
 				v = data[i];
@@ -131,25 +125,16 @@ extend(webim.prototype, objectExtend,{
 				id = type == "unicast" ? (v.to == uid ? v.from : v.to) : v.to;
 				v["id"] = id;
 				if(type == "unicast" && !v["new"]){
-					online_ids.push(id);
+					online_buddies.push({id: id, presence: "online"});
 				}
 			}
-			if(online_ids.length)buddy.online(online_ids);
+			if(online_buddies.length)buddy.presence(online_buddies);
 			history.handle(data);
 		});
-		function grepOffline(msg){
-			return msg.type == "offline";
-		}
-		function grepOnline(msg){
-			return msg.type == "online";
-		}
-		function mapFrom(a){ return a.from; }
+		function mapFrom(a){ return {id: a.from, presence: a.type, nick: a.nick, show: a.show}; }
 
 		self.bind("presence",function(data){
-			offline = grep(data, grepOffline);
-			online = grep(data, grepOnline);
-			buddy.online(map(online, mapFrom));
-			buddy.offline(map(offline, mapFrom));
+			buddy.presence(map(data, mapFrom));
 			//online.length && buddyUI.notice("buddyOnline", online.pop()["nick"]);
 		});
 	},
