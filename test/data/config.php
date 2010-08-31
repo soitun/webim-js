@@ -33,7 +33,7 @@ $buddies = array(
 	array(
 		"id" => 3,
 		"nick" => "Lily",
-		"group" => "stronger",
+		"group" => "stranger",
 		"pic_url" => "images/c.jpg",
 		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
 		"url" => "#3",
@@ -65,6 +65,114 @@ $buddies = array(
 		"show" => "available",
 		"status" => "I'm free.",
 		"status_time" => "10:55"
+	),
+	array(
+		"id" => 6,
+		"nick" => "Lily",
+		"group" => "stranger",
+		"pic_url" => "images/c.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#3",
+		"presence" => "online",
+		"show" => "available",
+		"status" => "I'm free.",
+		"status_time" => "10:55"
+	),
+	array(
+		"id" => 7,
+		"nick" => "Lily",
+		"group" => "stranger",
+		"pic_url" => "images/c.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#3",
+		"presence" => "online",
+		"show" => "available",
+		"status" => "I'm free.",
+		"status_time" => "10:55"
+	),
+	array(
+		"id" => 8,
+		"nick" => "Lily",
+		"group" => "stranger",
+		"pic_url" => "images/c.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#3",
+		"presence" => "online",
+		"show" => "available",
+		"status" => "I'm free.",
+		"status_time" => "10:55"
+	),
+	array(
+		"id" => 9,
+		"nick" => "Lily",
+		"group" => "stranger",
+		"pic_url" => "images/c.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#3",
+		"presence" => "online",
+		"show" => "available",
+		"status" => "I'm free.",
+		"status_time" => "10:55"
+	),
+	array(
+		"id" => 10,
+		"nick" => "Lily",
+		"group" => "stranger",
+		"pic_url" => "images/c.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#3",
+		"presence" => "online",
+		"show" => "available",
+		"status" => "I'm free.",
+		"status_time" => "10:55"
+	),
+	array(
+		"id" => 11,
+		"nick" => "Lily",
+		"group" => "stranger",
+		"pic_url" => "images/c.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#3",
+		"presence" => "online",
+		"show" => "available",
+		"status" => "I'm free.",
+		"status_time" => "10:55"
+	),
+	array(
+		"id" => 12,
+		"nick" => "Lily",
+		"group" => "stranger",
+		"pic_url" => "images/c.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#3",
+		"presence" => "online",
+		"show" => "available",
+		"status" => "I'm free.",
+		"status_time" => "10:55"
+	),
+	array(
+		"id" => 13,
+		"nick" => "Lily",
+		"group" => "stranger",
+		"pic_url" => "images/c.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#3",
+		"presence" => "online",
+		"show" => "available",
+		"status" => "I'm free.",
+		"status_time" => "10:55"
+	),
+	array(
+		"id" => 14,
+		"nick" => "Lily",
+		"group" => "stranger",
+		"pic_url" => "images/c.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#3",
+		"presence" => "online",
+		"show" => "available",
+		"status" => "I'm free.",
+		"status_time" => "10:55"
 	)
 );
 
@@ -81,6 +189,106 @@ $rooms = array(
 	),
 	array(
 		"id" => 2,
+		"nick" => "Happy Week",
+		"pic_url" => "images/n.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#4",
+		"all_count" => 5,
+		"count" => 2,
+		"blocked" => false
+	),
+	array(
+		"id" => 3,
+		"nick" => "Happy Week",
+		"pic_url" => "images/n.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#4",
+		"all_count" => 5,
+		"count" => 2,
+		"blocked" => false
+	),
+	array(
+		"id" => 4,
+		"nick" => "Happy Week",
+		"pic_url" => "images/n.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#4",
+		"all_count" => 5,
+		"count" => 2,
+		"blocked" => false
+	),
+	array(
+		"id" => 5,
+		"nick" => "Happy Week",
+		"pic_url" => "images/n.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#4",
+		"all_count" => 5,
+		"count" => 2,
+		"blocked" => false
+	),
+	array(
+		"id" => 6,
+		"nick" => "Happy Week",
+		"pic_url" => "images/n.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#4",
+		"all_count" => 5,
+		"count" => 2,
+		"blocked" => false
+	),
+	array(
+		"id" => 7,
+		"nick" => "Happy Week",
+		"pic_url" => "images/n.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#4",
+		"all_count" => 5,
+		"count" => 2,
+		"blocked" => false
+	),
+	array(
+		"id" => 8,
+		"nick" => "Happy Week",
+		"pic_url" => "images/n.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#4",
+		"all_count" => 5,
+		"count" => 2,
+		"blocked" => false
+	),
+	array(
+		"id" => 9,
+		"nick" => "Happy Week",
+		"pic_url" => "images/n.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#4",
+		"all_count" => 5,
+		"count" => 2,
+		"blocked" => false
+	),
+	array(
+		"id" => 10,
+		"nick" => "Happy Week",
+		"pic_url" => "images/n.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#4",
+		"all_count" => 5,
+		"count" => 2,
+		"blocked" => false
+	),
+	array(
+		"id" => 11,
+		"nick" => "Happy Week",
+		"pic_url" => "images/n.jpg",
+		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
+		"url" => "#4",
+		"all_count" => 5,
+		"count" => 2,
+		"blocked" => false
+	),
+	array(
+		"id" => 12,
 		"nick" => "Happy Week",
 		"pic_url" => "images/n.jpg",
 		"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
