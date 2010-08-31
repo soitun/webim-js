@@ -66,7 +66,6 @@ model("buddy", {
 			var v = data[i];
 			//Presence in [show,offline,online]
 			v.presence = v.presence == "offline" ? "offline" : "online";
-			v.show = v.show ? v.show : (v.presence == "offline" ? "unavailable" : "available");
 			v.incomplete = !dataHash[v.id];
 		}
 		self.handle(data);

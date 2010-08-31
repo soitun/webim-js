@@ -131,7 +131,12 @@ extend(webim.prototype, objectExtend,{
 			if(online_buddies.length)buddy.presence(online_buddies);
 			history.handle(data);
 		});
-		function mapFrom(a){ return {id: a.from, presence: a.type, nick: a.nick, show: a.show}; }
+		function mapFrom(a){ 
+			var d = {id: a.from, presence: a.type}; 
+			if(a.show)d.show = a.show;
+			if(a.nick)d.nick = a.nick;
+			return d;
+		}
 
 		self.bind("presence",function(data){
 			buddy.presence(map(data, mapFrom));
