@@ -7,6 +7,7 @@ $connection = array(
 );
 
 $user = array(
+	"uid" => 1,
 	"id" => 1,
 	"nick" => "Jack",
 	"pic_url" => "images/a.jpg",
@@ -16,7 +17,6 @@ $user = array(
 	"status" => "I'm free.",
 	"status_time" => "10:55"
 );
-
 $buddies = array(
 	array(
 		"id" => 2,
@@ -326,6 +326,7 @@ $histories = array(
 		);
 
 foreach($buddies as $i => $o){
+	$buddies[$i]['uid'] = $buddies[$i]['id'];
 	$histories["unicast"][$o["id"]] = array(
 		array(
 			"type" => "unicast",
