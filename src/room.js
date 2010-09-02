@@ -100,7 +100,7 @@
 				if(!member){
 					info.nick = info.nick;
 					members.push(info);
-					room.members.length;
+					room.count = members.length;
 					self.trigger("addMember",[room_id, info]);
 				}
 			}
