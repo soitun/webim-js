@@ -176,6 +176,8 @@ extend(webim.prototype, objectExtend,{
 	sendPresence: function(msg){
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
+		//save show status
+		self.data.user.show = msg.show;
 		self.status.set("s", msg.show);
 		ajax({
 			type: 'post',
