@@ -128,7 +128,11 @@ extend(webim.prototype, objectExtend,{
 					online_buddies.push({id: id, presence: "online"});
 				}
 			}
-			if(online_buddies.length)buddy.presence(online_buddies);
+			if(online_buddies.length){
+				buddy.presence(online_buddies);
+				//the chat window will pop out, need complete info
+				buddy.complete();
+			}
 			history.handle(data);
 		});
 		function mapFrom(a){ 
