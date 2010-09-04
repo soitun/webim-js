@@ -125,7 +125,10 @@ extend(webim.prototype, objectExtend,{
 				id = type == "unicast" ? (v.to == uid ? v.from : v.to) : v.to;
 				v["id"] = id;
 				if(type == "unicast" && !v["new"]){
-					online_buddies.push({id: id, presence: "online"});
+					var msg = {id: id, presence: "online"};
+					//update nick.
+					if(v.nick)msg.nick = v.nick;
+					online_buddies.push(msg);
 				}
 			}
 			if(online_buddies.length){
