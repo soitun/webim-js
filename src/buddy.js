@@ -51,7 +51,11 @@ model("buddy", {
 		var self = this, data = self.dataHash, ids = [], v;
 		for(var key in data){
 			v = data[key];
-			if(v.incomplete && v.presence == 'online')ids.push(key);
+			if(v.incomplete && v.presence == 'online'){
+				//Don't load repeat. 
+				v.incomplete = false;
+				ids.push(key);
+			}
 		}
 		self.load(ids);
 	},
