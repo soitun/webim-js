@@ -142,6 +142,7 @@ extend(webim.prototype, objectExtend,{
 			var d = {id: a.from, presence: a.type}; 
 			if(a.show)d.show = a.show;
 			if(a.nick)d.nick = a.nick;
+			if(a.status)d.status = a.status;
 			return d;
 		}
 
