@@ -30,6 +30,8 @@
 * 	message
 * 	presence
 * 	status
+*
+* 	sendMsg
 */
 
 
@@ -160,6 +162,7 @@ extend(webim.prototype, objectExtend,{
 	sendMsg: function(msg){
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
+		self.trigger("sendMsg",[msg]);
 		ajax({
 			type: 'post',
 			url: self.options.urls.message,
