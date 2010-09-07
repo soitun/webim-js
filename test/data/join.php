@@ -8,7 +8,7 @@ foreach($rooms as $i => $r){
 
 if($room){
 	$room["members"] = $members;
-	echo json_encode($room);
+	echo callback($room);
 }else{
 	header("HTTP/1.0 404 Not Found");
 }

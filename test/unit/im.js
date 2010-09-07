@@ -1,7 +1,9 @@
 module("new");
 test("new", function() {
 	expect(4);
-	var im = new webim();
+	var im = new webim(null, {
+		jsonp: true
+	});
 	stop(6000);
 	im.bind("ready", function(){
 		ok(true, "ready");

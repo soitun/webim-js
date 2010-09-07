@@ -37,6 +37,10 @@
 			var self = this;
 			self.data = self.data || [];
 			self.dataHash = {};
+			if(self.options.jsonp)
+				self.request = jsonp;
+			else
+				self.request = ajax;
 		},
 		get: function(id){
 			return this.dataHash[id];
@@ -128,7 +132,7 @@
 		},
 		loadMember: function(id){
 			var self = this, options = self.options;
-			ajax({
+			self.request({
 				type: "get",
 				cache: false,
 				url: options.urls.member,
@@ -145,7 +149,7 @@
 		join:function(id){
 			var self = this, options = self.options, user = options.user;
 
-			ajax({
+			self.request({
 				cache: false,
 				type: "post",
 				url: options.urls.join,
@@ -166,7 +170,7 @@
 			var self = this, options = self.options, d = self.dataHash[id], user = options.user;
 			if(d){
 				d.initMember = false;
-				ajax({
+				self.request({
 					cache: false,
 					type: "post",
 					url: options.urls.leave,

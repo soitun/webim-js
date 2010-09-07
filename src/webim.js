@@ -43,15 +43,19 @@ function webim(element, options){
 
 extend(webim.prototype, objectExtend,{
 	_init: function(){
-		var self = this;
+		var self = this, options = self.options;
 		//Default user status info.
 		var user = {presence: 'offline', show: 'unavailable'};
+		if(options.jsonp)
+			self.request = jsonp;
+		else
+			self.request = ajax;
 		self.data = {user: user};
 		self.status = new webim.status();
-		self.setting = new webim.setting();
-		self.buddy = new webim.buddy(null, {active: self.status.get("b")});
-		self.room = new webim.room(null, {user: user});
-		self.history = new webim.history(null, {user: user});
+		self.setting = new webim.setting(null, {jsonp: options.jsonp});
+		self.buddy = new webim.buddy(null, {active: self.status.get("b"), jsonp: options.jsonp});
+		self.room = new webim.room(null, {user: user, jsonp: options.jsonp});
+		self.history = new webim.history(null, {user: user, jsonp: options.jsonp});
 		self.connection = new comet(null,{jsonp:true});
 		self._initEvents();
 		//self.online();
@@ -163,7 +167,7 @@ extend(webim.prototype, objectExtend,{
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
 		self.trigger("sendMsg",[msg]);
-		ajax({
+		self.request({
 			type: 'post',
 			url: self.options.urls.message,
 			cache: false,
@@ -173,7 +177,7 @@ extend(webim.prototype, objectExtend,{
 	sendStatus: function(msg){
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
-		ajax({
+		self.request({
 			type: 'post',
 			url: self.options.urls.status,
 			cache: false,
@@ -186,7 +190,7 @@ extend(webim.prototype, objectExtend,{
 		//save show status
 		self.data.user.show = msg.show;
 		self.status.set("s", msg.show);
-		ajax({
+		self.request({
 			type: 'post',
 			url: self.options.urls.presence,
 			cache: false,
@@ -217,7 +221,7 @@ extend(webim.prototype, objectExtend,{
 		status.set("o", false);
 		status.set("s", params.show);
 
-		ajax({
+		self.request({
 			type:"post",
 			dataType: "json",
 			data: params,
@@ -241,7 +245,7 @@ extend(webim.prototype, objectExtend,{
 		self.status.set("o", true);
 		self.connection.close();
 		self._stop("offline");
-		ajax({
+		self.request({
 			type: 'post',
 			url: self.options.urls.offline,
 			type: 'post',
@@ -256,7 +260,7 @@ extend(webim.prototype, objectExtend,{
 	_refresh:function(){
 		var self = this, data = self.data;
 		if(!data || !data.connection || !data.connection.ticket) return;
-		ajax({
+		self.request({
 			type: 'post',
 			url: self.options.urls.refresh,
 			type: 'post',

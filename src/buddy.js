@@ -20,6 +20,10 @@ model("buddy", {
 }, {
 	_init: function(){
 		var self = this;
+		if(self.options.jsonp)
+			self.request = jsonp;
+		else
+			self.request = ajax;
 		self.data = self.data || [];
 		self.dataHash = {};
 		self.handle(self.data);
@@ -78,7 +82,7 @@ model("buddy", {
 		ids = idsArray(ids);
 		if(ids.length){
 			var self = this, options = self.options;
-			ajax({
+			self.request({
 				type: "get",
 				url: options.url,
 				cache: false,

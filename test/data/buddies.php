@@ -9,6 +9,6 @@ foreach($buddies as $i => $b){
 	}
 }
 
-echo json_encode($output_buddies);
+echo callback($output_buddies);
 
 ?>

@@ -20,6 +20,10 @@ model("setting",{
 },{
 	_init:function(){
 		var self = this;
+		if(self.options.jsonp)
+			self.request = jsonp;
+		else
+			self.request = ajax;
 		self.data = extend({}, self.options.data, self.data);
 	},
 	get: function(key){
@@ -40,7 +44,7 @@ model("setting",{
 			});
 			var _new = extend({}, _old, options);
 			self.data = _new;
-			ajax({
+			self.request({
 				type: 'post',
 				url: self.options.url,
 				dataType: 'json',

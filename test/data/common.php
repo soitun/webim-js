@@ -48,6 +48,14 @@ function ids_except($id, $ids){
 	return $ids;
 }
 
+function callback( $data ){
+	$data = json_encode($data);
+	if(gp("callback")){
+		return gp("callback") . "($data);";
+	}else{
+		return $data;
+	};
+}
 $id = gp("id");
 $ids = ids_array(gp("ids"));
 

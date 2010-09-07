@@ -20,9 +20,14 @@ model("history",{
 	urls:{load:"webim/history", clear:"webim/clear_history"}
 }, {
 	_init:function(){
-		this.data = this.data || {};
-		this.data.unicast = this.data.unicast || {};
-		this.data.multicast = this.data.multicast || {};
+		var self = this;
+		self.data = self.data || {};
+		self.data.unicast = self.data.unicast || {};
+		self.data.multicast = self.data.multicast || {};
+		if(self.options.jsonp)
+			self.request = jsonp;
+		else
+			self.request = ajax;
 	},
 	//get: function(type, id){
 	//	return this.data[type][id];
@@ -68,7 +73,7 @@ model("history",{
 		var self = this, options = self.options;
 		self.data[type][id] = [];
 		self.trigger("clear", [type, id]);
-		ajax({
+		self.request({
 			url: options.urls.clear,
 			type: "post",
 			cache: false,
@@ -86,7 +91,7 @@ model("history",{
 	load: function(type, id){
 		var self = this, options = self.options;
 		self.data[type][id] = [];
-		ajax({
+		self.request({
 			url: options.urls.load,
 			cache: false,
 			type: "get",
