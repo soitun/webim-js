@@ -14,7 +14,7 @@ $user = array(
 	"default_pic_url" => "http://mat1.gtimg.com/www/mb/images/head_50.jpg",
 	"url" => "#1",
 	"show" => "available",
-	"status" => "I'm free.",
+	"status" => "珊瑚虫QQ作者陈寿福创业 团购网站“偶的团”（oudetuan.com）将上线.. 竟然已经放出来了...",
 	"status_time" => "10:55"
 );
 $buddies = array(
@@ -27,7 +27,7 @@ $buddies = array(
 		"url" => "#2",
 		"presence" => "online",
 		"show" => "available",
-		"status" => "I'm free.",
+		"status" => "I'm Not here.",
 		"status_time" => "10:55"
 	),
 	array(
@@ -51,7 +51,7 @@ $buddies = array(
 		"url" => "#4",
 		"presence" => "online",
 		"show" => "available",
-		"status" => "I'm free.",
+		"status" => "I'm There is a 2007 American/German biographical/musical film directed by Todd Haynes, inspired by iconic American singer-songwriter Bob Dylan. Six actors depict different facets of Dylan's life and public persona: Christian Bale, Cate Blanchett, Marcus Carl Franklin, Richard Gere, Heath Ledger, and Ben Whishaw.<img src='images/e.jpg'/>",
 		"status_time" => "10:55"
 	),
 	array(
