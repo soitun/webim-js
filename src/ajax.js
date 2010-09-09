@@ -307,7 +307,7 @@ function ajax( s ) {
 //};
 function emptyFunction(){}
 function jsonp(s){
-	s = extend({}, s);
+	s = extend({ timeout : 5000 }, s);
 	var data = "" + param(s.data),
 	callbackContext = s.context || window,
 	jsonp = "jsonp" + jsc++,
