@@ -93,6 +93,7 @@ model("history",{
 		self.data[type][id] = [];
 		self.request({
 			url: options.urls.load,
+			async: true,
 			cache: false,
 			type: "get",
 			dataType: "json",

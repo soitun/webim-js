@@ -134,6 +134,7 @@
 			var self = this, options = self.options;
 			self.request({
 				type: "get",
+				async: true,
 				cache: false,
 				url: options.urls.member,
 				dataType: "json",
@@ -152,6 +153,7 @@
 			self.request({
 				cache: false,
 				type: "post",
+				async: true,
 				url: options.urls.join,
 				dataType: "json",
 				data: {

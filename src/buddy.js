@@ -85,6 +85,7 @@ model("buddy", {
 			self.request({
 				type: "get",
 				url: options.url,
+				async: true,
 				cache: false,
 				dataType: "json",
 				data:{ ids: ids.join(",")},
