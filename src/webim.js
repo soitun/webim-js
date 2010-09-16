@@ -316,6 +316,7 @@ extend(webim,{
 	map: map,
 	JSON: JSON,
 	ajax: ajax,
+	jsonp: jsonp,
 	comet: comet,
 	model: model,
 	objectExtend: objectExtend
