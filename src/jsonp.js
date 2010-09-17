@@ -50,32 +50,42 @@ var jsonpSupport = window.jsonpSupport = {
 	fragmentProxy: false
 };
 (function(){
-	var head = document.getElementsByTagName("head")[0] || document.createElement,
-	script = document.createElement("script"),
-	script2 = document.createElement("script"),
-	text = "window.jsonpSupport.defaultAsync = false;";
-	script.src = "about:blank";
-	script.onload = script.onerror = function() {
-		jsonpSupport.defaultAsync = true;
-		jsonpSupport.events = true;
-	}                
-	script.onreadystatechange = function() {
-		// ie defaultAsync = true
-		jsonpSupport.events = true;
-	}
-	head.appendChild( script );
-	try{
-		script2.appendChild( document.createTextNode( text ) );
-	} catch( e ){
-		script2.text = text;
-	}
-	head.appendChild( script2 );
-	setTimeout(function(){
-		script.onload = script.onerror = script.onreadystatechange = null;
-		head.removeChild( script );
-		head.removeChild( script2 );
-		head = script = script2 = null;
-	}, 1000);
+	var ua = navigator.userAgent.toLowerCase();
+	jsonpSupport.events = !/(opera)(?:.*version)?[ \/]([\w.]+)/.exec( ua );
+	jsonpSupport.defaultAsync = !!/(webkit)[ \/]([\w.]+)/.exec( ua );
+/*
+var head = document.getElementsByTagName("head")[0] || document.createElement,
+script = document.createElement("script"),
+script2 = document.createElement("script"),
+text = "window.jsonpSupport.defaultAsync = false;";
+script.src = "javascript:false";
+script.onload = function(e) {
+jsonpSupport.defaultAsync = true;
+jsonpSupport.events = true;
+};                
+
+script.onerror = function(e) {
+jsonpSupport.defaultAsync = true;
+jsonpSupport.events = true;
+};               
+script.onreadystatechange = function() {
+// ie defaultAsync = true
+jsonpSupport.events = true;
+};
+head.appendChild( script );
+try{
+script2.appendChild( document.createTextNode( text ) );
+} catch( e ){
+script2.text = text;
+}
+head.appendChild( script2 );
+setTimeout(function(){
+script.onload = script.onerror = script.onreadystatechange = null;
+head.removeChild( script );
+head.removeChild( script2 );
+head = script = script2 = null;
+}, 1000);
+*/
 	//Check fragment proxy
 	var frag = document.createDocumentFragment(),
 	script3 = document.createElement('script');
