@@ -10,7 +10,8 @@ webim.defaults.urls = {
 webim.setting.defaults.url = _path + "data/setting.php";
 webim.history.defaults.urls = {
 	load: _path + "data/history.php",
-	clear: _path + "data/clear_history.php"
+	clear: _path + "data/clear_history.php",
+	download: _path + "data/download_history.php"
 };
 webim.buddy.defaults.url = _path + "data/buddies.php";
 webim.room.defaults.urls = {

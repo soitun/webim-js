@@ -17,7 +17,7 @@ clear //type, id
 */
 
 model("history",{
-	urls:{load:"webim/history", clear:"webim/clear_history"}
+	urls:{ load:"webim/history", clear:"webim/clear_history", download: "webim/download_history" }
 }, {
 	_init:function(){
 		var self = this;
@@ -80,6 +80,37 @@ model("history",{
 			//dataType: "json",
 			data:{ type: type, id: id}
 		});
+	},
+	download: function(type, id){
+		var self = this, options = self.options;
+		var f = document.createElement('iframe'), fid = "webim-download" + (new Date()).getTime(); 
+		f.setAttribute( "id", fid );
+		f.setAttribute( "name", fid );
+		f.style.display = 'none'; 
+		document.body.appendChild(f); 
+		f = document.createElement('form'); 
+		f.style.display = 'none'; 
+		document.body.appendChild(f); 
+		f.setAttribute('method', 'POST'); 
+		f.setAttribute('action', options.urls.download); 
+		f.setAttribute('target', fid); 
+		var s = document.createElement('input'); 
+		s.setAttribute('type', 'hidden'); 
+		s.setAttribute('name', 'type'); 
+		s.setAttribute('value', type); 
+		f.appendChild(s);
+		s = document.createElement('input'); 
+		s.setAttribute('type', 'hidden'); 
+		s.setAttribute('name', 'id'); 
+		s.setAttribute('value', id); 
+		f.appendChild(s);
+		s = document.createElement('input'); 
+		s.setAttribute('type', 'hidden'); 
+		s.setAttribute('name', 'date'); 
+		var d = new Date();
+		s.setAttribute('value', d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate()); 
+		f.appendChild(s);
+		f.submit();
 	},
 	init: function(type, id, data){
 		var self = this;
