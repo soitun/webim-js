@@ -83,7 +83,8 @@ model("history",{
 	},
 	download: function(type, id){
 		var self = this, options = self.options;
-		var f = document.createElement('iframe'), fid = "webim-download" + (new Date()).getTime(); 
+		var now = (new Date()).getTime();
+		var f = document.createElement('iframe'), fid = "webim-download" + now; 
 		f.setAttribute( "id", fid );
 		f.setAttribute( "name", fid );
 		f.style.display = 'none'; 
@@ -91,7 +92,7 @@ model("history",{
 		f = document.createElement('form'); 
 		f.style.display = 'none'; 
 		document.body.appendChild(f); 
-		f.setAttribute('method', 'POST'); 
+		f.setAttribute('method', 'GET'); 
 		f.setAttribute('action', options.urls.download); 
 		f.setAttribute('target', fid); 
 		var s = document.createElement('input'); 
@@ -103,6 +104,11 @@ model("history",{
 		s.setAttribute('type', 'hidden'); 
 		s.setAttribute('name', 'id'); 
 		s.setAttribute('value', id); 
+		f.appendChild(s);
+		s = document.createElement('input'); 
+		s.setAttribute('type', 'hidden'); 
+		s.setAttribute('name', 'time'); 
+		s.setAttribute('value', now); 
 		f.appendChild(s);
 		s = document.createElement('input'); 
 		s.setAttribute('type', 'hidden'); 
