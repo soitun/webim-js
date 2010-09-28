@@ -101,13 +101,13 @@ extend(webim.prototype, objectExtend,{
 			self.trigger("message",[n_msg]);
 		}
 	},
-	_stop: function(msg){
+	_stop: function( type, msg ){
 		var self = this;
 		window.onbeforeunload = self._unloadFun;
 		self.data.user.presence = "offline";
 		self.data.user.show = "unavailable";
 		self.buddy.clear();
-		self.trigger("stop", msg);
+		self.trigger("stop", [type, msg] );
 	},
 	autoOnline: function(){
 		return !this.status.get("o");
@@ -118,9 +118,9 @@ extend(webim.prototype, objectExtend,{
 		}).bind("data",function(data){
 			self.handle(data);
 		}).bind("error",function(data){
-			self._stop("connect error");
+			self._stop("connect", "Connect Error");
 		}).bind("close",function(data){
-			self._stop("disconnect");
+			self._stop("connect", "Disconnect");
 		});
 		self.bind("message", function(data){
 			var online_buddies = [], l = data.length, uid = self.data.user.id, v, id, type;
@@ -226,9 +226,11 @@ extend(webim.prototype, objectExtend,{
 			dataType: "json",
 			data: params,
 			url: self.options.urls.online,
-			success: function(data){
-				if(!data || !data.user || !data.connection){
-					self._stop("online error");
+			success: function( data ){
+				if( !data ){
+					self._stop( "online", "Not Found" );
+				}else if( !data.success ) {
+					self._stop( "online", data.error_msg );
 				}else{
 					data.user = extend(self.data.user, data.user, {presence: "online"});
 					self.data = data;
@@ -236,7 +238,7 @@ extend(webim.prototype, objectExtend,{
 				}
 			},
 			error: function(data){
-				self._stop("online error");
+				self._stop( "online", "Not Found" );
 			}
 		});
 	},
@@ -244,7 +246,7 @@ extend(webim.prototype, objectExtend,{
 		var self = this, data = self.data;
 		self.status.set("o", true);
 		self.connection.close();
-		self._stop("offline");
+		self._stop("offline", "offline");
 		self.request({
 			type: 'post',
 			url: self.options.urls.offline,

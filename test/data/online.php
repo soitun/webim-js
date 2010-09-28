@@ -18,6 +18,7 @@ foreach($buddies as $i => $b){
 }
 
 $output = array(
+	"success" => true,
 	"server_time" => microtime(true)*1000,
 	"user" => $user,
 	"connection" => $connection,
@@ -35,6 +36,13 @@ $output = array(
 		)
 	)
 );
+
+if ( !gp("username") ){
+	$output = array(
+		"success" => false,
+		"error_msg" => "Not Authorized"
+	);
+}
 
 echo callback($output);
 
