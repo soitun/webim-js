@@ -100,7 +100,7 @@ head = script = script2 = null;
 })();
 
 //setTimeout(function(){
-//alert( JSON.encode( jsonpSupport ) );
+//alert( JSON.stringify( jsonpSupport ) );
 //alert( !jsonpSupport.fragmentProxy && !jsonpSupport.defaultAsync && !jsonpSupport.async );
 //}, 300);
 

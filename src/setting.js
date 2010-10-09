@@ -49,7 +49,7 @@ model("setting",{
 				url: self.options.url,
 				dataType: 'json',
 				cache: false,
-				data: {data: JSON.encode(_new)}
+				data: {data: JSON.stringify(_new)}
 			});
 		}
 	}
