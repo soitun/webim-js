@@ -1,15 +1,15 @@
 module("json");
 
-test("webim.JSON.encode()", function(){
-	encode = webim.JSON.encode;
+test("webim.JSON.stringify()", function(){
+	stringify = webim.JSON.stringify;
 	expect( 2 );
-	equals(encode({c:1,b:"2",d:{a:0}}), "{\"c\":1,\"b\":\"2\",\"d\":{\"a\":0}}", "correct encode"); 
-	equals(encode(2), "2", "string value");
+	equals(stringify({c:1,b:"2",d:{a:0}}), "{\"c\":1,\"b\":\"2\",\"d\":{\"a\":0}}", "correct stringify"); 
+	equals(stringify(2), "2", "string value");
 });
 
-test("webim.JSON.decode()", function(){
-	decode = webim.JSON.decode;
+test("webim.JSON.parse()", function(){
+	parse = webim.JSON.parse;
 	expect( 2 );
-	same(decode("{\"c\":1,\"b\":\"2\",\"d\":{\"a\":0}}"), {c:1,b:"2",d:{a:0}}, "correct encode"); 
-	equals(decode(2), "2", "string value");
+	same(parse("{\"c\":1,\"b\":\"2\",\"d\":{\"a\":0}}"), {c:1,b:"2",d:{a:0}}, "correct encode"); 
+	equals(parse(2), "2", "string value");
 });
