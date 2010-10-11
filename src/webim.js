@@ -288,6 +288,11 @@ function model(name, defaults, proto){
 	extend(m.prototype, objectExtend, proto);
 	webim[name] = m;
 }
+
+function route( key ) {
+	return route[key];
+}
+
 //_webim = window.webim;
 window.webim = webim;
 
@@ -321,5 +326,6 @@ extend(webim,{
 	jsonp: jsonp,
 	comet: comet,
 	model: model,
+	route: route,
 	objectExtend: objectExtend
 });

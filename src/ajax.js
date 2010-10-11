@@ -6,6 +6,7 @@
 
 // key/values into a query string
 var r20 = /%20/g;
+
 function param( a ) {
 	var s = [];
 	if ( typeof a == "object"){
@@ -21,6 +22,7 @@ function param( a ) {
 var jsc = now(),
 	rquery = /\?/,
 	rts = /(\?|&)_=.*?(&|$)/,
+	rurl = /^(\w+:)?\/\/([^\/?#]+)/,
 	ajaxSettings = {
 		url: location.href,
 		global: true,

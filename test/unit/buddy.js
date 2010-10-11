@@ -4,13 +4,13 @@ test("webim.buddy - basic method", 9, function(){
 	stop(3000);
 	var buddy = new webim.buddy(buddies, {active: false});
 	buddy.bind("online", function(data){
-		ok(true, "online event:" + JSON.encode(data));
+		ok(true, "online event:" + JSON.stringify(data));
 	});
 	buddy.bind("offline", function(data){
-		ok(data[0], "offline event:" + JSON.encode(data));
+		ok(data[0], "offline event:" + JSON.stringify(data));
 	});
 	buddy.bind("update", function(data){
-		ok(data[0], "update event:" + JSON.encode(data));
+		ok(data[0], "update event:" + JSON.stringify(data));
 		if(data[0]["id"] == 4)start();
 	});
 	ok(buddy.get(2), "get");

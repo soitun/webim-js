@@ -8,7 +8,7 @@ test("webim.comet connect", function() {
 		server: _path + "data/packets.php"
 	});
 	comet.bind("data", function(d){
-		ok(d, "receive data: " + webim.JSON.encode(d));
+		ok(d, "receive data: " + webim.JSON.stringify(d));
 		comet.close();
 		start();
 	});
