@@ -1,4 +1,5 @@
 <?php 
+header("Content-type: application/javascript");
 $callback = empty($_GET["callback"]) ? "" : $_GET["callback"];
 $timeout = empty($_GET["timeout"]) ? 5 : $_GET["timeout"];
 sleep( $timeout );
