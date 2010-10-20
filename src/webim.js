@@ -56,7 +56,7 @@ extend(webim.prototype, objectExtend,{
 		self.buddy = new webim.buddy(null, {active: self.status.get("b"), jsonp: options.jsonp});
 		self.room = new webim.room(null, {user: user, jsonp: options.jsonp});
 		self.history = new webim.history(null, {user: user, jsonp: options.jsonp});
-		self.connection = new comet(null,{jsonp:true});
+		self.connection = new comet( null, { jsonp: window.location.protocol == "app:" ? false : true } );
 		self._initEvents();
 		//self.online();
 	},
@@ -115,7 +115,7 @@ extend(webim.prototype, objectExtend,{
 	_initEvents: function(){
 		var self = this, status = self.status, setting = self.setting, history = self.history, connection = self.connection, buddy = self.buddy;
 		connection.bind("connect",function(e, data){
-		}).bind("data",function(data){
+		}).bind("data",function( data ) {
 			self.handle(data);
 		}).bind("error",function(data){
 			self._stop("connect", "Connect Error");

@@ -29,9 +29,9 @@ model("history",{
 		else
 			self.request = ajax;
 	},
-	//get: function(type, id){
-	//	return this.data[type][id];
-	//},
+	get: function( type, id ) {
+		return this.data[type][id];
+	},
 	unicast: function(id){
 		return this.data["unicast"][id];
 	},

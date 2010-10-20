@@ -158,7 +158,7 @@ extend(comet.prototype, objectExtend, {
 			}
 		}
         },
-        _onPollError: function(m){
+        _onPollError: function( m ) {
                 var self = this;
                 self._onPolling = false;
                 if (!self._connecting) 

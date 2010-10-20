@@ -9,9 +9,12 @@ function log(str, method){
 	var d = new Date(),  time = ['[', d.getHours(), ':', d.getMinutes(), ':', d.getSeconds(), '-', d.getMilliseconds(), ']'].join(""), msg = time + method + JSON.stringify(str);
 	window.console && window.console.log(time, method, str); 
 	//cosole.log("%s: %o",msg,this);
-	var log = document.getElementById("webim-log") || document.body;
-	window.air && window.air.trace(msg); //air
-	if (log){ 
+	var log = document.getElementById("webim-log");
+	if ( window.runtime && window.air ) {
+		window.air.trace( msg ); //air
+		window.air.Introspector && window.air.Introspector.Console.log( msg );
+	}
+	if ( log ) { 
 		var m = document.createElement("P");
 		m.innerHTML = msg;
 		log.appendChild(m);
