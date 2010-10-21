@@ -128,11 +128,13 @@ extend(comet.prototype, objectExtend, {
                         error: self._onPollError
                 };
                 if(options.jsonp){
-                	extend(o,{
+                	extend( o, {
                 	        timeout: options.timeout,
                 	        dataType: 'jsonp',
+				//JSONP with async request, Fix bug http://github.com/webim/webim-js/issues/issue/6
+				async: true,
                 	        jsonp: 'callback'
-                	});
+                	} );
 			jsonp(o);
 		}
 		else

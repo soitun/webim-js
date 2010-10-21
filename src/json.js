@@ -1,7 +1,9 @@
 
 /** HTML5 contain JSON */
 
-if ( !JSON ) {
+if ( window.JSON ) {
+	var JSON = window.JSON;
+} else {
 	var JSON = ( function() {
 		var chars = {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"' : '\\"', '\\': '\\\\'};
 
