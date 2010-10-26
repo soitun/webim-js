@@ -1,51 +1,19 @@
 /*
 * room
-*attributes：
-*data []所有信息 readonly 
-*methods:
-*	get(id)
-*	handle()
-*	join(id)
-*	leave(id)
-*	count()
-*	initMember
-*	loadMember
-*	addMember
-*	removeMember
-*	members(id)
-*	member_cont(id)
-*
-*events:
-*	join
-*	leave
-*	block
-*	unblock
-*	addMember
-*	removeMember
-*
 *
 */
-(function(){
+( function() {
 	model("room", {
-		urls:{
-			join: "/webim/join",
-			leave: "/webim/leave",
-			member: "/webim/members"
-		}
 	},{
-		_init: function(){
+		_init: function() {
 			var self = this;
 			self.data = self.data || [];
 			self.dataHash = {};
-			if(self.options.jsonp)
-				self.request = jsonp;
-			else
-				self.request = ajax;
 		},
-		get: function(id){
+		get: function(id) {
 			return this.dataHash[id];
 		},
-		block: function(id){
+		block: function(id) {
 			var self = this, d = self.dataHash[id];
 			if(d && !d.blocked){
 				d.blocked = true;
@@ -53,10 +21,10 @@
 				each(self.dataHash,function(n,v){
 					if(v.blocked) list.push(v.id);
 				});
-				self.trigger("block",[id, list]);
+				self.d("block",[id, list]);
 			}
 		},
-		unblock: function(id){
+		unblock: function(id) {
 			var self = this, d = self.dataHash[id];
 			if(d && d.blocked){
 				d.blocked = false;
@@ -64,10 +32,10 @@
 				each(self.dataHash,function(n,v){
 					if(v.blocked) list.push(v.id);
 				});
-				self.trigger("unblock",[id, list]);
+				self.d("unblock",[id, list]);
 			}
 		},
-		handle: function(d){
+		set: function(d) {
 			var self = this, data = self.data, dataHash = self.dataHash, status = {};
 			each(d,function(k,v){
 				var id = v.id;
@@ -80,7 +48,7 @@
 						data.push(v);
 					}
 					else extend(dataHash[id], v);
-					self.trigger("join",[dataHash[id]]);
+					self.d("join",[dataHash[id]]);
 				}
 
 			});
@@ -105,7 +73,7 @@
 					info.nick = info.nick;
 					members.push(info);
 					room.count = members.length;
-					self.trigger("addMember",[room_id, info]);
+					self.d("addMember",[room_id, info]);
 				}
 			}
 		},
@@ -120,7 +88,7 @@
 						room.count--;
 					}
 				}
-				member && self.trigger("removeMember",[room_id, member]);
+				member && self.d("removeMember",[room_id, member]);
 			}
 		},
 		initMember: function(id){
@@ -132,12 +100,11 @@
 		},
 		loadMember: function(id){
 			var self = this, options = self.options;
-			self.request({
+			ajax( {
 				type: "get",
-				async: true,
 				cache: false,
-				url: options.urls.member,
-				dataType: "json",
+				url: route( "members" ),
+				dataType: "jsonp",
 				data: {
 					ticket: options.ticket,
 					id: id
@@ -150,21 +117,20 @@
 		join:function(id){
 			var self = this, options = self.options, user = options.user;
 
-			self.request({
+			ajax({
+				type: "get",
 				cache: false,
-				type: "post",
-				async: true,
-				url: options.urls.join,
-				dataType: "json",
+				url: route( "join" ),
+				dataType: "jsonp",
 				data: {
 					ticket: options.ticket,
 					id: id,
 					nick: user.nick
 				},
-				success: function(data){
-					//self.trigger("join",[data]);
-					self.initMember(id);
-					self.handle([data]);
+				success: function( data ) {
+					//self.d("join",[data]);
+					self.initMember( id );
+					self.set( [ data ] );
 				}
 			});
 		},
@@ -172,20 +138,21 @@
 			var self = this, options = self.options, d = self.dataHash[id], user = options.user;
 			if(d){
 				d.initMember = false;
-				self.request({
+				ajax({
+					type: "get",
 					cache: false,
-					type: "post",
-					url: options.urls.leave,
+					url: route( "leave" ),
+					dataType: "jsonp",					
 					data: {
 						ticket: options.ticket,
 						id: id,
 						nick: user.nick
 					}
 				});
-				self.trigger("leave",[d]);
+				self.d("leave",[d]);
 			}
 		},
 		clear:function(){
 		}
-	});
-})();
+	} );
+} )();

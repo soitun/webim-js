@@ -1,104 +1,81 @@
-/*
-*
-* Depends:
-* 	core.js
-*
-* options:
-*
-* attributes:
-* 	data
-* 	status
-* 	setting
-* 	history
-* 	buddy
-* 	connection
-*
-*
-* methods:
-* 	online
-* 	offline
-* 	autoOnline
-* 	sendMsg
-* 	sendStatus
-* 	setStranger
-*
-* events:
-* 	ready
-* 	go
-* 	stop
-*
-* 	message
-* 	presence
-* 	status
-*
-* 	sendMsg
-*/
 
-
-function webim(element, options){
-	var self = this;
-	self.options = extend({}, webim.defaults, options);
-	this._init(element, options);
+function webim( element, options ) {
+	this.options = extend( {}, webim.defaults, options );
+	this._init( element, options );
 }
 
-extend(webim.prototype, objectExtend,{
-	_init: function(){
+ClassEvent.on( webim );
+
+extend(webim.prototype, {
+	_init: function() {
 		var self = this, options = self.options;
 		//Default user status info.
-		var user = {presence: 'offline', show: 'unavailable'};
-		if(options.jsonp)
-			self.request = jsonp;
-		else
-			self.request = ajax;
-		self.data = {user: user};
+		self.data = { 
+			user: {
+				presence: 'offline', 
+				show: 'unavailable'
+			}
+		};
 		self.status = new webim.status();
-		self.setting = new webim.setting(null, {jsonp: options.jsonp});
-		self.buddy = new webim.buddy(null, {active: self.status.get("b"), jsonp: options.jsonp});
-		self.room = new webim.room(null, {user: user, jsonp: options.jsonp});
-		self.history = new webim.history(null, {user: user, jsonp: options.jsonp});
-		self.connection = new comet( null, { jsonp: window.location.protocol == "app:" ? false : true } );
+		self.setting = new webim.setting();
+		self.buddy = new webim.buddy();
+		self.room = new webim.room(null, self.data );
+		self.history = new webim.history(null, self.data );
 		self._initEvents();
-		//self.online();
 	},
-	user: function(info){
-		extend(this.data.user, info);
+	_createConnect: function() {
+		var self = this;
+		var url = self.data.connection;
+		url = url.server + ( /\?/.test( url ) ? "&" : "?" ) + ajax.param( { ticket: url.ticket, domain: url.domain } );
+		self.connection = new comet( url );
+		self.connection.a( "connect",function( e, data ) {
+		}).a( "message", function( e, data ) {
+			self.handle( data );
+		}).a( "error", function( e, data ){
+			self._stop( "connect", "Connect Error" );
+		}).a( "close", function( e, data ) {
+			self._stop( "connect", "Disconnect" );
+		});
 	},
-	_ready: function(post_data){
+	setUser: function( info ) {
+		extend( this.data.user, info );
+	},
+	_ready: function( post_data ) {
 		var self = this;
 		self._unloadFun = window.onbeforeunload;
 		window.onbeforeunload = function(){
-			self._refresh();
+			self._deactivate();
 		};
-		self.trigger("ready", [post_data]);
+		self.d( "beforeOnline", [ post_data ] );
 	},
-	_go: function(){
+	_go: function() {
 		var self = this, data = self.data, history = self.history, buddy = self.buddy, room = self.room;
-		history.option("userInfo", data.user);
+		history.options.userInfo = data.user;
 		var ids = [];
-		each(data.buddies, function(n, v){
-			history.init("unicast", v.id, v.history);
+		each( data.buddies, function(n, v) {
+			history.init( "unicast", v.id, v.history );
 		});
-		buddy.handle(data.buddies);
+		buddy.set( data.buddies );
 		//rooms
-		each(data.rooms, function(n, v){
-			history.init("multicast", v.id, v.history);
+		each( data.rooms, function(n, v) {
+			history.init( "multicast", v.id, v.history );
 		});
 		//blocked rooms
 		var b = self.setting.get("blocked_rooms"), roomData = data.rooms;
 		isArray(b) && roomData && each(b,function(n,v){
 			roomData[v] && (roomData[v].blocked = true);
 		});
-		room.handle(roomData);
+		room.set(roomData);
 		room.options.ticket = data.connection.ticket;
-		self.trigger("go",[data]);
-		self.connection.connect(data.connection);
+		self.d("online",[data]);
+		self._createConnect();
 		//handle new messages at last
 		var n_msg = data.new_messages;
 		if(n_msg && n_msg.length){
 			each(n_msg, function(n, v){
 				v["new"] = true;
 			});
-			self.trigger("message",[n_msg]);
+			self.d("message",[n_msg]);
 		}
 	},
 	_stop: function( type, msg ){
@@ -107,22 +84,15 @@ extend(webim.prototype, objectExtend,{
 		self.data.user.presence = "offline";
 		self.data.user.show = "unavailable";
 		self.buddy.clear();
-		self.trigger("stop", [type, msg] );
+		self.d("offline", [type, msg] );
 	},
-	autoOnline: function(){
-		return !this.status.get("o");
-	},
+	//autoOnline: function(){
+	//	return !this.status.get("o");
+	//},
 	_initEvents: function(){
-		var self = this, status = self.status, setting = self.setting, history = self.history, connection = self.connection, buddy = self.buddy;
-		connection.bind("connect",function(e, data){
-		}).bind("data",function( data ) {
-			self.handle(data);
-		}).bind("error",function(data){
-			self._stop("connect", "Connect Error");
-		}).bind("close",function(data){
-			self._stop("connect", "Disconnect");
-		});
-		self.bind("message", function(data){
+		var self = this, status = self.status, setting = self.setting, history = self.history, buddy = self.buddy;
+
+		self.a( "message", function( e, data ) {
 			var online_buddies = [], l = data.length, uid = self.data.user.id, v, id, type;
 			//When revice a new message from router server, make the buddy online.
 			for(var i = 0; i < l; i++){
@@ -130,57 +100,60 @@ extend(webim.prototype, objectExtend,{
 				type = v["type"];
 				id = type == "unicast" ? (v.to == uid ? v.from : v.to) : v.to;
 				v["id"] = id;
-				if(type == "unicast" && !v["new"]){
-					var msg = {id: id, presence: "online"};
+				if( type == "unicast" && !v["new"] ) {
+					var msg = { id: id, presence: "online" };
 					//update nick.
-					if(v.nick)msg.nick = v.nick;
-					online_buddies.push(msg);
+					if( v.nick ) msg.nick = v.nick;
+					online_buddies.push( msg );
 				}
 			}
-			if(online_buddies.length){
-				buddy.presence(online_buddies);
+			if( online_buddies.length ) {
+				buddy.presence( online_buddies );
 				//the chat window will pop out, need complete info
 				buddy.complete();
 			}
-			history.handle(data);
+			history.set( data );
 		});
-		function mapFrom(a){ 
-			var d = {id: a.from, presence: a.type}; 
-			if(a.show)d.show = a.show;
-			if(a.nick)d.nick = a.nick;
-			if(a.status)d.status = a.status;
+		function mapFrom( a ) { 
+			var d = { id: a.from, presence: a.type }; 
+			if( a.show ) d.show = a.show;
+			if( a.nick ) d.nick = a.nick;
+			if( a.status ) d.status = a.status;
 			return d;
 		}
 
-		self.bind("presence",function(data){
-			buddy.presence(map(data, mapFrom));
+		self.a("presence",function( e, data ) {
+			buddy.presence( map( data, mapFrom ) );
 			//online.length && buddyUI.notice("buddyOnline", online.pop()["nick"]);
 		});
 	},
 	handle: function(data){
 		var self = this;
-		data.messages && data.messages.length && self.trigger("message",[data.messages]);
-		data.presences && data.presences.length && self.trigger("presence",[data.presences]);
-		data.statuses && data.statuses.length && self.trigger("status",[data.statuses]);
+		data.messages && data.messages.length && self.d( "message", [ data.messages ] );
+		data.presences && data.presences.length && self.d( "presence", [ data.presences ] );
+		data.statuses && data.statuses.length && self.d( "status", [ data.statuses ] );
 	},
-	sendMsg: function(msg){
+	sendMessage: function( msg ) {
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
-		self.trigger("sendMsg",[msg]);
-		self.request({
-			type: 'post',
-			url: self.options.urls.message,
+		self.d( "sendMessage", [ msg ] );
+		ajax({
+			type:"get",
+			dataType: "jsonp",
 			cache: false,
+			url: route( "message" ),
 			data: msg
 		});
 	},
 	sendStatus: function(msg){
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
-		self.request({
-			type: 'post',
-			url: self.options.urls.status,
+		self.d( "sendStatus", [ msg ] );
+		ajax({
+			type:"get",
+			dataType: "jsonp",
 			cache: false,
+			url: route( "status" ),			
 			data: msg
 		});
 	},
@@ -189,69 +162,72 @@ extend(webim.prototype, objectExtend,{
 		msg.ticket = self.data.connection.ticket;
 		//save show status
 		self.data.user.show = msg.show;
-		self.status.set("s", msg.show);
-		self.request({
-			type: 'post',
-			url: self.options.urls.presence,
+		self.status.set( "s", msg.show );
+		self.d( "sendPresence", [ msg ] );
+		ajax( {
+			type:"get",
+			dataType: "jsonp",
 			cache: false,
+			url: route( "presence" ),			
 			data: msg
-		});
+		} );
 	},
 	//setStranger: function(ids){
 	//	this.stranger_ids = idsArray(ids);
 	//},
 	//stranger_ids: [],
-	online:function(params){
+	online: function( params ) {
 		var self = this, status = self.status;
-		var buddy_ids = [], room_ids = [], tabs = status.get("tabs"), tabIds = status.get("tabIds");
-		if(tabIds && tabIds.length && tabs){
-			each(tabs, function(k,v){
-				if(k[0] == "b") buddy_ids.push(k.slice(2));
-				if(k[0] == "r") room_ids.push(k.slice(2));
-			});
-		}
+		//var buddy_ids = [], room_ids = [], tabs = status.get("tabs"), tabIds = status.get("tabIds");
+		//if(tabIds && tabIds.length && tabs){
+		//	each(tabs, function(k,v){
+		//		if(k[0] == "b") buddy_ids.push(k.slice(2));
+		//		if(k[0] == "r") room_ids.push(k.slice(2));
+		//	});
+		//}
 		params = extend({                                
 			//stranger_ids: self.stranger_ids.join(","),
-			buddy_ids: buddy_ids.join(","),
-			room_ids: room_ids.join(","),
-			show: status.get("s") || "available"
+			//buddy_ids: buddy_ids.join(","),
+			//room_ids: room_ids.join(","),
+			//show: status.get("s") || "available"
 		}, params);
 		self._ready(params);
 		//set auto open true
-		status.set("o", false);
-		status.set("s", params.show);
+		//status.set("o", false);
+		//status.set("s", params.show);
 
-		self.request({
-			type:"post",
-			dataType: "json",
+		ajax({
+			type:"get",
+			dataType: "jsonp",
+			cache: false,
+			url: route( "online" ),
 			data: params,
-			url: self.options.urls.online,
 			success: function( data ){
 				if( !data ){
 					self._stop( "online", "Not Found" );
 				}else if( !data.success ) {
 					self._stop( "online", data.error_msg );
 				}else{
-					data.user = extend(self.data.user, data.user, {presence: "online"});
+					data.user = extend( self.data.user, data.user, { presence: "online" } );
 					self.data = data;
 					self._go();
 				}
 			},
-			error: function(data){
+			error: function( data ) {
 				self._stop( "online", "Not Found" );
 			}
 		});
 	},
-	offline:function(){
+	offline: function() {
 		var self = this, data = self.data;
-		self.status.set("o", true);
+		//self.status.set("o", true);
 		self.connection.close();
 		self._stop("offline", "offline");
-		self.request({
-			type: 'post',
-			url: self.options.urls.offline,
-			type: 'post',
+		ajax({
+			type:"get",
+			dataType: "jsonp",
 			cache: false,
+			url: route( "offline" ),
 			data: {
 				status: 'offline',
 				ticket: data.connection.ticket
@@ -259,56 +235,56 @@ extend(webim.prototype, objectExtend,{
 		});
 
 	},
-	_refresh:function(){
+	_deactivate: function(){
 		var self = this, data = self.data;
-		if(!data || !data.connection || !data.connection.ticket) return;
-		self.request({
-			type: 'post',
-			url: self.options.urls.refresh,
-			type: 'post',
+		if( !data || !data.connection || !data.connection.ticket ) return;
+		ajax( {
+			type:"get",
+			dataType: "jsonp",
 			cache: false,
+			url: route( "deactivate" ),
 			data: {
 				ticket: data.connection.ticket
 			}
-		});
+		} );
 	}
 
 });
-function idsArray(ids){
-	return ids && ids.split ? ids.split(",") : (isArray(ids) ? ids : (parseInt(ids) ? [parseInt(ids)] : []));
+
+function idsArray( ids ) {
+	return ids && ids.split ? ids.split( "," ) : ( isArray( ids ) ? ids : ( parseInt( ids ) ? [ parseInt( ids ) ] : [] ) );
 }
-function model(name, defaults, proto){
-	function m(data,options){
+function model( name, defaults, proto ) {
+	function m( data, options ) {
 		var self = this;
 		self.data = data;
-		self.options = extend({}, m.defaults,options);
-		isFunction(self._init) && self._init();
+		self.options = extend( {}, m.defaults, options );
+		isFunction( self._init ) && self._init();
 	}
 	m.defaults = defaults;
-	extend(m.prototype, objectExtend, proto);
-	webim[name] = m;
+	ClassEvent.on( m );
+	extend( m.prototype, proto );
+	webim[ name ] = m;
 }
 
-function route( key ) {
-	return route[key];
+function route( ob, val ) {
+	var options = ob;
+	if( typeof ob == "string" ) {
+		options[ ob ] = val;
+		if ( val === undefined )
+			return route[ ob ];
+	}
+	extend( route, options );
 }
 
 //_webim = window.webim;
 window.webim = webim;
 
-extend(webim,{
-	version:"@VERSION",
+extend( webim, {
+	version: "@VERSION",
 	defaults:{
-		urls:{
-			online: "webim/online",
-			offline: "webim/offline",
-			message: "webim/message",
-			presence: "webim/presence",
-			refresh: "webim/refresh",
-			status: "webim/status"
-		}
 	},
-	log:log,
+	log: log,
 	idsArray: idsArray,
 	now: now,
 	isFunction: isFunction,
@@ -323,9 +299,8 @@ extend(webim,{
 	map: map,
 	JSON: JSON,
 	ajax: ajax,
-	jsonp: jsonp,
 	comet: comet,
 	model: model,
 	route: route,
-	objectExtend: objectExtend
-});
+	ClassEvent: ClassEvent
+} );

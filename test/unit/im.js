@@ -1,24 +1,21 @@
 module("new");
 test("new", function() {
 	expect(4);
-	var im = new webim(null, {
-		jsonp: true
-	});
+	var im = new webim();
 	stop(6000);
-	im.bind("ready", function(){
+	im.a("beforeOnline", function(){
 		ok(true, "ready");
 	});
-	im.bind("message", function(msg){
+	im.a("message", function(e, msg){
 		ok(msg, "message");
 		im.offline();
 	});
-	im.bind("go", function(){
+	im.a("online", function(){
 		ok(true, "go");
 	});
-	im.bind("stop", function(){
+	im.a("offline", function(){
 		ok(true, "stop");
 		start();
 	});
-	im.buddy.option("loadDelay", true);
 	im.online();
 });

@@ -61,16 +61,16 @@ comet.prototype = {
 	_onClose: function( m ) {
 		var self = this;
 		self._setting();
-		self.d( 'close', m );
+		self.d( 'close', [ m ] );
 	},
 	_onData: function(data) {
 		var self = this;
-		self.d( 'message', data );
+		self.d( 'message', [ data ] );
 	},
 	_onError: function( text ) {
 		var self = this;
 		self._setting();
-		self.d( 'error', text );
+		self.d( 'error', [ text ] );
 	},
 	_startPolling: function() {
 		var self = this;

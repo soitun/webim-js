@@ -1,5 +1,5 @@
 /*!
- * ClassEvent.js v0.1
+ * ClassEvent.js v0.2
  *
  * http://github.com/webim/ClassEvent.js
  *
@@ -31,14 +31,18 @@ ClassEvent.on.prototype = {
 		ls[ type ].push( listener );
 		return self;
 	},
-	dispatchEvent: function( event, data ) {
+	dispatchEvent: function( event, extraParameters ) {
 		var self = this, ls = self.__listeners = self.__listeners || {};
 		event = event.type ? event : new ClassEvent( event );
 		ls = ls[ event.type ];
-		event.data = data;
+		if ( Object.prototype.toString.call( extraParameters ) === "[object Array]" ) {
+			extraParameters.unshift( event );
+		} else {
+			extraParameters = [ event, extraParameters ];
+		}
 		if ( ls ) {
 			for ( var i = 0, l = ls.length; i < l; i++ ) {
-				ls[ i ].apply( self, [ event, data ] );
+				ls[ i ].apply( self, extraParameters );
 			}
 		}
 		return self;

@@ -1,34 +1,17 @@
 /**
- * buddy //联系人
- * attributes：
- * 	data []所有信息 readonly 
- * methods:
- * 	get(id)
- * 	handle(data) //handle data and distribute events
- * 	presence(data) //handle buddy presence.
- * 	complete() //Complete info.
- * 	update(ids) 更新用户信息 有更新时触发events:update
+* buddy //联系人
+*/
 
- * events:
- * 	online  //  data:[]
- * 	offline  //  data:[]
- * 	update 
- */
-
-model("buddy", {
-	url:"/webim/buddy"
+model( "buddy", {
+	active: true
 }, {
 	_init: function(){
 		var self = this;
-		if(self.options.jsonp)
-			self.request = jsonp;
-		else
-			self.request = ajax;
 		self.data = self.data || [];
 		self.dataHash = {};
-		self.handle(self.data);
+		self.set( self.data );
 	},
-	clear:function(){
+	clear:function() {
 		var self =this;
 		self.data = [];
 		self.dataHash = {};
@@ -36,10 +19,10 @@ model("buddy", {
 	count: function(conditions){
 		var data = this.dataHash, count = 0, t;
 		for(var key in data){
-			if(isObject(conditions)){
+			if( isObject( conditions ) ) {
 				t = true;
 				for(var k in conditions){
-					if(conditions[k] != data[key][k]) t = false;
+					if( conditions[k] != data[key][k] ) t = false;
 				}
 				if(t) count++;
 			}else{
@@ -48,53 +31,52 @@ model("buddy", {
 		}
 		return count;
 	},
-	get: function(id){
-		return this.dataHash[id];
+	get: function( id ) {
+		return this.dataHash[ id ];
 	},
-	complete: function(){
+	complete: function() {
 		var self = this, data = self.dataHash, ids = [], v;
-		for(var key in data){
-			v = data[key];
-			if(v.incomplete && v.presence == 'online'){
+		for( var key in data ) {
+			v = data[ key ];
+			if( v.incomplete && v.presence == 'online' ) {
 				//Don't load repeat. 
 				v.incomplete = false;
-				ids.push(key);
+				ids.push( key );
 			}
 		}
-		self.load(ids);
+		self.load( ids );
 	},
-	update: function(ids){
-		this.load(ids);
+	update: function( ids ) {
+		this.load( ids );
 	},
-	presence: function(data){
+	presence: function( data ) {
 		var self = this, dataHash = self.dataHash;
-		data = isArray(data) ? data : [data];
+		data = isArray( data ) ? data : [ data ];
 		//Complete presence info.
-		for(var i in data){
-			var v = data[i];
+		for( var i in data ) {
+			var v = data[ i ];
 			//Presence in [show,offline,online]
 			v.presence = v.presence == "offline" ? "offline" : "online";
-			v.incomplete = !dataHash[v.id];
+			v.incomplete = !dataHash[ v.id ];
 		}
-		self.handle(data);
+		self.set( data );
 	},
-	load: function(ids){
-		ids = idsArray(ids);
-		if(ids.length){
+	load: function( ids ) {
+		ids = idsArray( ids );
+		if( ids.length ) {
 			var self = this, options = self.options;
-			self.request({
+			ajax( {
 				type: "get",
-				url: options.url,
-				async: true,
+				url: route( "buddies" ),
 				cache: false,
-				dataType: "json",
-				data:{ ids: ids.join(",")},
+				dataType: "jsonp",
+				data:{ ids: ids.join(",") },
 				context: self,
-				success: self.handle
-			});
+				success: self.set
+			} );
 		}
 	},
-	handle: function(addData){
+	set: function( addData ) {
 		var self = this, data = self.data, dataHash = self.dataHash, status = {};
 		addData = addData || [];
 		var l = addData.length , v, type, add;
@@ -118,9 +100,9 @@ model("buddy", {
 				}
 			}
 		}
-		for (var key in status) {
-			self.trigger(key, [status[key]]);
+		for ( var key in status ) {
+			self.d( key, [ status[key] ] );
 		}
 		self.options.active && self.complete();
 	}
-});
+} );
