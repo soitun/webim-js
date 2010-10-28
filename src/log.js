@@ -4,7 +4,7 @@ function log() {
 	if ( window && window.console ) {
 		window.console.log.apply( null, arguments );
 	} else if ( window && window.runtime && window.air && window.air.Introspector ) {
-		window.air.Introspector.apply( null, arguments );
+		window.air.Introspector.Console.log.apply( null, arguments );
 	}
 
 }
