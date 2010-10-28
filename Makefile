@@ -7,9 +7,8 @@ DIST_DIR = ${PREFIX}/dist
 SRC_DIR = ${PREFIX}/src
 
 BASE_FILES = ${SRC_DIR}/core.js\
-	${SRC_DIR}/objectExtend.js\
+	${SRC_DIR}/ClassEvent.js\
 	${SRC_DIR}/ajax.js\
-	${SRC_DIR}/jsonp.js\
 	${SRC_DIR}/json.js\
 	${SRC_DIR}/comet.js\
 	${SRC_DIR}/cookie.js\
