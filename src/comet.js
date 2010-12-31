@@ -130,6 +130,7 @@ extend(comet.prototype, objectExtend, {
                 if(options.jsonp){
                 	extend(o,{
                 	        timeout: options.timeout,
+				async: true,
                 	        dataType: 'jsonp',
                 	        jsonp: 'callback'
                 	});
