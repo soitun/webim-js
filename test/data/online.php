@@ -37,12 +37,12 @@ $output = array(
 	)
 );
 
-if ( !gp("username") ){
-	$output = array(
-		"success" => false,
-		"error_msg" => "Not Authorized"
-	);
-}
+//if ( !gp("username") ){
+//	$output = array(
+//		"success" => false,
+//		"error_msg" => "Not Authorized"
+//	);
+//}
 
 echo callback($output);
 

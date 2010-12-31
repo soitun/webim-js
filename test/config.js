@@ -3,6 +3,7 @@ webim.defaults.urls = {
 	online: _path + "data/online.php",
 	offline: _path + "data/offline.php",
 	message: _path + "data/message.php",
+	logmsg: _path + "data/logmsg.php",
 	presence: _path + "data/presence.php",
 	refresh: _path + "data/refresh.php",
 	status: _path + "data/status.php"
