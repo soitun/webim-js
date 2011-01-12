@@ -75,12 +75,12 @@ extend(webim.prototype, objectExtend,{
 		var self = this, data = self.data, history = self.history, buddy = self.buddy, room = self.room;
 		history.option("userInfo", data.user);
 		var ids = [];
-		each(data.buddies, function(n, v){
+		data.buddies && each(data.buddies, function(n, v){
 			history.init("unicast", v.id, v.history);
 		});
 		buddy.handle(data.buddies);
 		//rooms
-		each(data.rooms, function(n, v){
+		data.rooms && each(data.rooms, function(n, v){
 			history.init("multicast", v.id, v.history);
 		});
 		//blocked rooms
@@ -88,7 +88,7 @@ extend(webim.prototype, objectExtend,{
 		isArray(b) && roomData && each(b,function(n,v){
 			roomData[v] && (roomData[v].blocked = true);
 		});
-		room.handle(roomData);
+		roomData && room.handle(roomData);
 		room.options.ticket = data.connection.ticket;
 		self.trigger("go",[data]);
 		self.connection.connect(data.connection);
