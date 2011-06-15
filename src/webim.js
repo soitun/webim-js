@@ -120,7 +120,7 @@ extend(webim.prototype, objectExtend,{
 		}).bind("error",function(data){
 			self._stop("connect", "Connect Error");
 		}).bind("close",function(data){
-			self._stop("connect", "Disconnect");
+			!self.options.disableDisconnect && self._stop("connect", "Disconnect");
 		});
 		self.bind("message", function(data){
 			var online_buddies = [], l = data.length, uid = self.data.user.id, v, id, type;
